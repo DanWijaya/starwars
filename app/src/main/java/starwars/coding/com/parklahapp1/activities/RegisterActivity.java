@@ -152,6 +152,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             databaseHelper.addUser(user);
 
             emptyInputEditText();
+            Toast.makeText(this, "Register successfull", Toast.LENGTH_SHORT).show();
+//            Snackbar.make(nestedScrollView, getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
             initLoginAfterRegister();
 
 

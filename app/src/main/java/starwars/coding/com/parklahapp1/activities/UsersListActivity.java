@@ -8,6 +8,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Button;
+import android.widget.TextView;
 
 //import  starwars.coding.com.parklahapp1.R;
 import starwars.coding.com.parklahapp1.adapters.UsersRecyclerAdapter;
@@ -84,5 +86,29 @@ public class UsersListActivity extends AppCompatActivity {
                 usersRecyclerAdapter.notifyDataSetChanged();
             }
         }.execute();
+    }
+
+    public static class MainActivity extends AppCompatActivity {
+
+        Button click;
+        public static TextView data;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+
+
+    //        click = (Button) findViewById(R.id.button);
+    //        data = (TextView) findViewById(R.id.fetchedData);
+    //
+    //        click.setOnClickListener(new View.OnClickListener() {
+    //            @Override
+    //            public void onClick(View v) {
+    //                fetchData process = new fetchData();
+    //                process.execute();
+    //
+    //            }
+    //        });
+        }
     }
 }

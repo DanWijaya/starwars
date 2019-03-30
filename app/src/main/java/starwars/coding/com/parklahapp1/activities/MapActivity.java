@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,6 +36,8 @@ import com.google.android.gms.tasks.Task;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import starwars.coding.com.parklahapp1.locationhandling.fetchData;
 
 /**
  * Created by User on 10/2/2017.
@@ -61,6 +62,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
+
             init();
         }
     }
@@ -80,9 +82,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private fetchData carparkdata;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.e(TAG, "Retrieving carpark locations");
+
+//        fetchData carparks = new fetchData();
+//        carparks.doInBackground();
+
+        Log.e(TAG, "Carpark Locations retreived");
+
         Log.d(TAG, "MapCreated");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
@@ -104,6 +114,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         || keyEvent.getAction() == KeyEvent.ACTION_DOWN
                         || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
 
+                    if(mMap != null){
+                        mMap.clear();
+                    }
                     //execute our method for searching
                     geoLocate();
                 }
@@ -122,6 +135,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         hideSoftKeyboard();
     }
+
+//    private void geoLocate(){
+//        Log.d(TAG, "geoLocate: geolocating");
+//
+//        String searchString = mSearchText.getText().toString();
+//
+//        Geocoder geocoder = new Geocoder(MapActivity.this);
+//        List<Address> list = new ArrayList<>();
+//        try{
+//            list = geocoder.getFromLocationName(searchString, 1);
+//        }catch (IOException e){
+//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+//        }
+//
+//        if(list.size() > 0){
+//            Address address = list.get(0);
+//
+//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+//            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+//
+//            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
+//                    address.getAddressLine(0));
+//        }
+//    }
 
     private void geoLocate(){
         Log.d(TAG, "geoLocate: geolocating");
