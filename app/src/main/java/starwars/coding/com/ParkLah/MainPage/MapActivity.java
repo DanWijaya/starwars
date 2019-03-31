@@ -91,7 +91,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mGps = (ImageView) findViewById(R.id.ic_magnify);
 
         getLocationPermission();
-
     }
 
     private void init(){

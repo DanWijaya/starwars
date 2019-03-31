@@ -4,11 +4,13 @@ public interface MapContract {
 
     interface View{
 
-        void showCurrentLoc();
+        void showCurrentLocation();
 
+        void showSearchUI();
     }
 
     interface Presenter{
 
+        void onSearch();
     }
 }

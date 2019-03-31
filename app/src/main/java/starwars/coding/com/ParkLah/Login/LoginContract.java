@@ -29,6 +29,5 @@ public interface LoginContract {
 
         void onSignUp();
 
-
     }
 }
