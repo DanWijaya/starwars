@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1.activities;
+package starwars.coding.com.ParkLah.MainPage;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,9 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 //import  starwars.coding.com.parklahapp1.R;
-import starwars.coding.com.parklahapp1.adapters.UsersRecyclerAdapter;
-import starwars.coding.com.parklahapp1.model.User;
-import starwars.coding.com.parklahapp1.sql.DatabaseHelper;
+import starwars.coding.com.ParkLah.activities.R;
+import starwars.coding.com.ParkLah.adapters.UsersRecyclerAdapter;
+import starwars.coding.com.ParkLah.Entity.User;
+import starwars.coding.com.ParkLah.Database.AccSqlManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class UsersListActivity extends AppCompatActivity {
     private RecyclerView recyclerViewUsers;
     private List<User> listUsers;
     private UsersRecyclerAdapter usersRecyclerAdapter;
-    private DatabaseHelper databaseHelper;
+    private AccSqlManager databaseHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setAdapter(usersRecyclerAdapter);
-        databaseHelper = new DatabaseHelper(activity);
+        databaseHelper = new AccSqlManager(activity);
 
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
         textViewName.setText(emailFromIntent);

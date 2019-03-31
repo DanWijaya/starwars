@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="starwars.coding.com.parklahapp1.activities">
+    package="starwars.coding.com.ParkLah.activities">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="starwars.coding.com.parklahapp1.activities.LoginActivity"
+            android:name="starwars.coding.com.ParkLah.Login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,13 +32,13 @@
             android:value="AIzaSyBwKZvub9r3BSgTreif26fGsZj4h5AqMKA"/>
 
         <activity
-            android:name="starwars.coding.com.parklahapp1.activities.RegisterActivity"
+            android:name="starwars.coding.com.ParkLah.Signup.SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="starwars.coding.com.parklahapp1.activities.UsersListActivity"
+            android:name="starwars.coding.com.ParkLah.MainPage.MapActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name="starwars.coding.com.parklahapp1.activities.MapActivity"
+        <activity android:name="starwars.coding.com.ParkLah.MainPage.UsersListActivity"
             android:screenOrientation="portrait"/>
     </application>
 

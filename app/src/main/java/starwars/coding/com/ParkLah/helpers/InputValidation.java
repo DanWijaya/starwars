@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1.helpers;
+package starwars.coding.com.ParkLah.helpers;
 
 import android.app.Activity;
 import android.content.Context;

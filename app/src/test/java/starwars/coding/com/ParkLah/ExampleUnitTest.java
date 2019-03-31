@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1;
+package starwars.coding.com.ParkLah;
 
 import org.junit.Test;
 

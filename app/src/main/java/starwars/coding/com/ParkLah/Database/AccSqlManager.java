@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1.sql;
+package starwars.coding.com.ParkLah.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,12 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import starwars.coding.com.parklahapp1.model.User;
+import starwars.coding.com.ParkLah.Database.AccountDB;
+import starwars.coding.com.ParkLah.Entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -41,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param context
      */
-    public DatabaseHelper(Context context) {
+    public AccSqlManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -62,11 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    /**
-     * This method is to create user record
-     *
-     * @param user
-     */
+    @Override
     public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -134,11 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userList;
     }
 
-    /**
-     * This method to update user record
-     *
-     * @param user
-     */
+    @Override
     public void updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -166,12 +159,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    /**
-     * This method to check user exist or not
-     *
-     * @param email
-     * @return true/false
-     */
+    @Override
     public boolean checkUser(String email) {
 
         // array of columns to fetch
@@ -210,13 +198,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    /**
-     * This method to check user exist or not
-     *
-     * @param email
-     * @param password
-     * @return true/false
-     */
+
+    @Override
     public boolean checkUser(String email, String password) {
 
         // array of columns to fetch

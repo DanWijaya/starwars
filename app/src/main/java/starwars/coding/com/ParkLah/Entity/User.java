@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1.model;
+package starwars.coding.com.ParkLah.Entity;
 
 public class User {
     private int id;

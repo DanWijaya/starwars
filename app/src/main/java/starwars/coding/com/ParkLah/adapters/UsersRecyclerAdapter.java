@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1.adapters;
+package starwars.coding.com.ParkLah.adapters;
 
 
 import android.support.v7.widget.AppCompatTextView;
@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import starwars.coding.com.parklahapp1.activities.R;
-import starwars.coding.com.parklahapp1.model.User;
+import starwars.coding.com.ParkLah.activities.R;
+import starwars.coding.com.ParkLah.Entity.User;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package starwars.coding.com.parklahapp1.activities;
+package starwars.coding.com.ParkLah.MainPage;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,11 +37,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import starwars.coding.com.ParkLah.activities.R;
+
 /**
  * Created by User on 10/2/2017.
  */
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final String TAG = "MapActivity";
+
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final float DEFAULT_ZOOM = 15f;
+
+    //widgets
+    private EditText mSearchText;
+    private ImageView mGps;
+
+    //vars
+    private Boolean mLocationPermissionsGranted = false;
+    private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -64,22 +81,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             init();
         }
     }
-
-    private static final String TAG = "MapActivity";
-
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 15f;
-
-    //widgets
-    private EditText mSearchText;
-    private ImageView mGps;
-
-    //vars
-    private Boolean mLocationPermissionsGranted = false;
-    private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
