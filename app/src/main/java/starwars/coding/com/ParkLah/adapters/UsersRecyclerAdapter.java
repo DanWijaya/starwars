@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import starwars.coding.com.ParkLah.activities.R;
+import starwars.coding.com.ParkLah.R;
 import starwars.coding.com.ParkLah.Entity.User;
 
 import java.util.List;

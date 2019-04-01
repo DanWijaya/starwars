@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import starwars.coding.com.ParkLah.activities.R;
+import starwars.coding.com.ParkLah.R;
 
 /**
  * Created by User on 10/2/2017.
