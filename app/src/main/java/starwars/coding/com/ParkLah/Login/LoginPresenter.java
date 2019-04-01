@@ -13,7 +13,6 @@ public class LoginPresenter implements LoginContract.Presenter {
         this.accountDB = accountDB;
     }
 
-
     @Override
     public boolean validInput(String email, String password){
         if(email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
