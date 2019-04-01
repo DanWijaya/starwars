@@ -11,6 +11,6 @@ public interface MapContract {
 
     interface Presenter{
 
-        void onSearch();
+        void onSearch(String searchString);
     }
 }

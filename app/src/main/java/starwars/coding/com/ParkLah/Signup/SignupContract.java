@@ -18,7 +18,6 @@ public interface SignupContract {
 
         void reset();
 
-
     }
 
     interface Presenter{
