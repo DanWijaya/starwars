@@ -2,7 +2,6 @@ package starwars.coding.com.ParkLah.MainPage;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
@@ -31,15 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-//import starwars.coding.com.parklahapp1.R;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import starwars.coding.com.ParkLah.R;
-
 
 /**
  * Created by User on 10/2/2017.

@@ -11,7 +11,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
-//import starwars.coding.com.parklahapp1.R;
 import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.MainPage.MapActivity;
 import starwars.coding.com.ParkLah.R;
