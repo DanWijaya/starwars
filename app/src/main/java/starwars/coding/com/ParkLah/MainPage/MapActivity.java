@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import starwars.coding.com.ParkLah.activities.R;
+import starwars.coding.com.ParkLah.R;
 
 
 /**

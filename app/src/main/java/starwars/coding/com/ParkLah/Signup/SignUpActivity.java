@@ -15,7 +15,7 @@ import android.view.View;
 //import starwars.coding.com.parklahapp1.R;
 import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.Login.LoginActivity;
-import starwars.coding.com.ParkLah.activities.R;
+import starwars.coding.com.ParkLah.R;
 import starwars.coding.com.ParkLah.Entity.User;
 import starwars.coding.com.ParkLah.Database.AccSqlManager;
 
