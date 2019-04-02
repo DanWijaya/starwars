@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import starwars.coding.com.ParkLah.Control.CoordManager.SVY21Coordinate;
 import starwars.coding.com.ParkLah.Database.AccountDB;
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.Entity.User;
 
 import java.util.ArrayList;
@@ -18,10 +20,12 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "UserManager.db";
+    private static final String DATABASE_NAME = "ParkLah.db";
 
     // User table name
     private static final String TABLE_USER = "user";
+    private static final String TABLE_CARPARK = "carpark";
+    private static final String TABLE_REVIEW = "review";
 
     // User Table Columns names
     private static final String COLUMN_USER_ID = "user_id";
@@ -29,26 +33,76 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
     private static final String COLUMN_USER_EMAIL = "user_email";
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
-    // create table sql query
-    private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT,"
-            + COLUMN_USER_EMAIL + " TEXT," + COLUMN_USER_PASSWORD + " TEXT" + ")";
+    // Carpark Table Columns names
+    private static final String COLUMN_CID = "id";
+    private static final String COLUMN_UID = "carpark_number";
+    private static final String COLUMN_X_COORDS = "x_coords";
+    private static final String COLUMN_Y_COORDS = "y_coords";
+    private static final String COLUMN_ADDRESS = "address";
+    private static final String COLUMN_CARPARK_TYPE = "carpar_type";
+    private static final String COLUMN_FREE_PARKING = "free_parking";
+    private static final String COLUMN_NIGHT_PARKING = "night_parking";
+    private static final String COLUMN_PARKING_SYSTEM_TYPE = "parking_system_type";
+    private static final String COLUMN_GANTRY_HEIGHT = "gantry_heigh_metres";
 
-    // drop table sql query
-    private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
 
-    /**
-     * Constructor
-     *
-     * @param context
-     */
-    public AccSqlManager(Context context) {
+    //Review Table Columns names
+    private static final String COLUMN_REVIEW_ID = "id";
+    private static final String COLUMN_REVIW_USER_ID_FK = "review_user_id";
+    private static final String COLUMN_REVIW_CARPARK_ID_FK = "review_carpark_id";
+    private static final String COLUMN_REVIEW_TEXT = "text";
+    private static final String COLUMN_REVIEW_RATING = "rating";
+
+
+    //Singleton Pattern
+    private static AccSqlManager aInstance;
+
+    public static synchronized AccSqlManager getInstance(Context context){
+        if(aInstance == null){
+            aInstance = new AccSqlManager(context.getApplicationContext());
+        }
+        return aInstance;
+    }
+
+    private AccSqlManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        // SQL query: create user table
+        String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
+                + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_USER_NAME + " TEXT,"
+                + COLUMN_USER_EMAIL + " TEXT,"
+                + COLUMN_USER_PASSWORD + " TEXT" + ")";
         db.execSQL(CREATE_USER_TABLE);
+
+        //SQL query: create carpark table
+        String CREATE_CARPARK_TABLE = "CREATE TABLE " + TABLE_CARPARK + "("
+                + COLUMN_CID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_UID + " TEXT,"
+                + COLUMN_X_COORDS + " REAL,"
+                + COLUMN_Y_COORDS + " REAL,"
+                + COLUMN_ADDRESS + " TEXT,"
+                + COLUMN_CARPARK_TYPE + " TEXT,"
+                + COLUMN_FREE_PARKING + " TEXT,"
+                + COLUMN_NIGHT_PARKING + " TEXT,"
+                + COLUMN_PARKING_SYSTEM_TYPE + " TEXT,"
+                + COLUMN_GANTRY_HEIGHT + " TEXT "
+//            + COLUMN_TOTAL_LOTS + " INTEGER,"
+//            + COLUMN_AVAILABLE_LOTS + " INTEGER"
+                + ")";
+        db.execSQL(CREATE_CARPARK_TABLE);
+
+        String CREATE_REVIEW_TABLE = "CREATE TABLE " + TABLE_REVIEW + "("
+                + COLUMN_REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_REVIW_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USER + ","
+                + COLUMN_REVIW_CARPARK_ID_FK + " INTEGER REFERENCES " + TABLE_CARPARK + ","
+                + COLUMN_REVIEW_TEXT + " TEXT,"
+                + COLUMN_REVIEW_RATING + " REAL" + ")";
+        db.execSQL(CREATE_REVIEW_TABLE);
     }
 
 
@@ -56,16 +110,25 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         //Drop User Table if exist
+        // drop table sql query
+        String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
         db.execSQL(DROP_USER_TABLE);
+        // drop table sql query
+        String DROP_CARPARK_TABLE = "DROP TABLE IF EXISTS " + TABLE_CARPARK;
+        db.execSQL(DROP_CARPARK_TABLE);
+        // drop table sql query
+        String DROP_REVIEW_TABLE = "DROP TABLE IF EXISTS " + TABLE_REVIEW;
+        db.execSQL(DROP_REVIEW_TABLE);
 
         // Create tables again
         onCreate(db);
-
     }
 
     @Override
     public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        db.beginTransaction();
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
@@ -74,7 +137,8 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
         // Inserting Row
         db.insert(TABLE_USER, null, values);
-        db.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     /**
@@ -98,7 +162,7 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // query the user table
-        /**
+        /*
          * Here query function is used to fetch records from user table this function works like we use sql query.
          * SQL query equivalent to this query function is
          * SELECT user_id,user_name,user_email,user_password FROM user ORDER BY user_name;
@@ -231,10 +295,89 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
         cursor.close();
         db.close();
-        if (cursorCount > 0) {
-            return true;
-        }
 
-        return false;
+        return cursorCount > 0;
     }
+
+    public void addCarparkInfo(CarparkInfoRecord record) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.beginTransaction();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_X_COORDS, record.getXCoord());
+        values.put(COLUMN_Y_COORDS, record.getYCoord());
+        values.put(COLUMN_UID, record.getCarParkNo());
+        values.put(COLUMN_ADDRESS, record.getAddress());
+        values.put(COLUMN_CARPARK_TYPE, record.getCarParkType());
+        values.put(COLUMN_FREE_PARKING, record.getFreeParking());
+        values.put(COLUMN_NIGHT_PARKING, record.getNightParking());
+        values.put(COLUMN_PARKING_SYSTEM_TYPE, record.getTypeOfParkingSystem());
+        values.put(COLUMN_GANTRY_HEIGHT, record.getGantryHeight());
+//        values.put(COLUMN_TOTAL_LOTS, record.getTotalLots());
+//        values.put(COLUMN_AVAILABLE_LOTS, record.getLotsAvailable());
+
+        // Inserting Row
+        db.insert(TABLE_CARPARK, null, values);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+    public List<CarparkInfoRecord> getCarparkByCoord(SVY21Coordinate bottomLeft, SVY21Coordinate upperRight){
+
+        List<CarparkInfoRecord> results = new ArrayList<>();
+
+        /*
+         * SELECT *
+         * FROM carpark AS C
+         * WHERE C.COLUMN_X_COORDS > bottemLeft.X
+         * AND C.COLUMN_X_COORDS < upperRight.X
+         * AND C.COLUMN_Y_ COORDS > bottemLeft.Y
+         * AND C.COLUMN_Y_COORDS < upperRight.Y
+         */
+        String QUERY = String.format("" +
+                "SELECT * " +
+                "FROM %s " +
+                "WHERE %s.%s > %s " +
+                "AND %s.%s < %s" +
+                "AND %s.%s > %s" +
+                "AND %s.%s < %s",
+                TABLE_CARPARK,
+                TABLE_CARPARK, COLUMN_X_COORDS, Double.toString(bottomLeft.getEasting()),
+                TABLE_CARPARK, COLUMN_X_COORDS, Double.toString(upperRight.getEasting()),
+                TABLE_CARPARK, COLUMN_Y_COORDS, Double.toString(bottomLeft.getNorthing()),
+                TABLE_CARPARK, COLUMN_Y_COORDS, Double.toString(upperRight.getNorthing()));
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    CarparkInfoRecord record = new CarparkInfoRecord();
+                    record.setCarParkNo(cursor.getString(cursor.getColumnIndex(COLUMN_UID)));
+                    record.setAddress(cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS)));
+                    record.setXCoord(cursor.getString(cursor.getColumnIndex(COLUMN_X_COORDS)));
+                    record.setYCoord(cursor.getString(cursor.getColumnIndex(COLUMN_Y_COORDS)));
+                    record.setCarParkType(cursor.getString(cursor.getColumnIndex(COLUMN_CARPARK_TYPE)));
+                    record.setFreeParking(cursor.getString(cursor.getColumnIndex(COLUMN_FREE_PARKING)));
+                    record.setNightParking(cursor.getString(cursor.getColumnIndex(COLUMN_NIGHT_PARKING)));
+                    record.setTypeOfParkingSystem(cursor.getString(cursor.getColumnIndex(COLUMN_PARKING_SYSTEM_TYPE)));
+
+                    results.add(record);
+                }while (cursor.moveToFirst());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(cursor!= null && !cursor.isClosed()){
+                cursor.close();
+            }
+        }
+        return results;
+    }
+
+
+
+
 }

@@ -1,5 +1,6 @@
 package starwars.coding.com.ParkLah.Database;
 
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.Entity.User;
 
 public interface AccountDB {
@@ -13,5 +14,7 @@ public interface AccountDB {
     void updateUser(User user);
 
     void deleteUser(User user);
+
+    void addCarparkInfo(CarparkInfoRecord record);
 
 }
