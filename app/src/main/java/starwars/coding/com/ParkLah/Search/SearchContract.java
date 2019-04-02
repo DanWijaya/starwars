@@ -11,7 +11,7 @@ public interface SearchContract {
 
     interface Presenter{
 
-        void onSeach(String searchString);
+        void doMySearch(String searchString);
 
 
 

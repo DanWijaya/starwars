@@ -48,6 +48,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     //widgets
     private EditText mSearchText;
+    private EditText sText;
     private ImageView mGps;
 
     //vars
@@ -81,8 +82,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "MapCreated");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        mSearchText = (EditText) findViewById(R.id.input_search);
-        mGps = (ImageView) findViewById(R.id.ic_magnify);
+//        mSearchText = (EditText) findViewById(R.id.input_search);
+        sText = (EditText) findViewById(R.id.input_search);
+        mGps = (ImageView) findViewById(R.id.ic_gps);
 
         Geocoder geocoder = new Geocoder(this);
         mapPresenter = new MapPresenter(geocoder, this);
@@ -92,28 +94,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void init(){
         Log.d(TAG, "init: initializing");
 
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-
-                    //execute our method for searching
-                    if(mMap != null){
-                        mMap.clear();
-                    }
-
-                    String searchString = mSearchText.getText().toString();
-                    mapPresenter.onSearch(searchString);
-
-//                    geoLocate();
-                }
-
-                return false;
+        sText.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.e(TAG, "A is launched");
+                onSearchRequested();
+                Log.e(TAG, "B is launched");
             }
         });
+
+//        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                if(actionId == EditorInfo.IME_ACTION_SEARCH
+//                        || actionId == EditorInfo.IME_ACTION_DONE
+//                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+//                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+//
+//                    //execute our method for searching
+//                    if(mMap != null){
+//                        mMap.clear();
+//                    }
+//
+//                    String searchString = mSearchText.getText().toString();
+//                    mapPresenter.onSearch(searchString);
+//
+////                    geoLocate();
+//                }
+//
+//                return false;
+//            }
+//        });
 
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
