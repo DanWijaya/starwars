@@ -18,11 +18,14 @@
         <activity
             android:name=".Login.LoginActivity"
             android:screenOrientation="portrait">
+<<<<<<< HEAD
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <!--<action android:name="android.intent.action.SEARCH" />-->
             </intent-filter>
+=======
+>>>>>>> 89ee72921ebd1ed642d1d5bbeb52f90b78265559
         </activity>
 
         <meta-data
@@ -38,9 +41,17 @@
         <activity
             android:name=".MainPage.MapActivity"
             android:screenOrientation="portrait">
+<<<<<<< HEAD
             <!--<meta-data-->
                 <!--android:name="android.app.searchable"-->
                 <!--android:resource="@xml/searchable" />-->
+=======
+
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".SearchActivity" />
+>>>>>>> 89ee72921ebd1ed642d1d5bbeb52f90b78265559
         </activity>
 
         <activity
@@ -48,11 +59,29 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Search.SearchActivity"
+<<<<<<< HEAD
             android:screenOrientation="portrait"/>
             <!--android:launchMode="singleTop"-->
             <!--android:label="@string/app_name">-->
 
         <activity android:name=".CarparkDetail.CarparkDetailActivity"></activity>
+=======
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".CarparkDetail.CarparkDetailActivity" />
+
+        <activity
+            android:name=".test"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+>>>>>>> 89ee72921ebd1ed642d1d5bbeb52f90b78265559
     </application>
 
 </manifest>

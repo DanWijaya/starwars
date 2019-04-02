@@ -22,8 +22,10 @@ import android.widget.ListAdapter;
 
 import starwars.coding.com.ParkLah.R;
 
-public class SearchActivity extends AppCompatActivity implements SearchContract.View{
+
+public class SearchActivity extends ListActivity implements SearchContract.View  {
     protected SQLiteDatabase db;
+
     private SearchContract.Presenter presenter;
 
 //    @Override
@@ -72,6 +74,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         // Get the intent, verify the action and get the query.
         presenter = new SearchPresenter(this);
         Intent intent = getIntent();
+
+        presenter = new SearchPresenter(this);
         handleIntent(intent);
     }
 
@@ -86,8 +90,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 //        searchPresenter = new SearchPresenter(this);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-//            searchPresenter.doMySearch(query);
             presenter.doMySearch(query);
+//            searchPresenter.doMySearch(query);
         }
     }
 }

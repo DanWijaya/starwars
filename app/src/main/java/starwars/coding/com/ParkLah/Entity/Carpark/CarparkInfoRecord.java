@@ -3,7 +3,9 @@ package starwars.coding.com.ParkLah.Entity.Carpark;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class CarparkInfoRecord {
+import java.util.Comparator;
+
+public class CarparkInfoRecord{
     @SerializedName("short_term_parking")
     @Expose
     private String shortTermParking;
@@ -43,6 +45,63 @@ public class CarparkInfoRecord {
     @SerializedName("type_of_parking_system")
     @Expose
     private String typeOfParkingSystem;
+
+    private int totalLots;
+
+    private double distanceToDevice;
+
+    public double getDistanceToDevice() {
+        return distanceToDevice;
+    }
+
+    public void setDistanceToDevice(double distanceToDevice) {
+        this.distanceToDevice = distanceToDevice;
+    }
+
+    public String getyCoord() {
+        return yCoord;
+    }
+
+    public void setyCoord(String yCoord) {
+        this.yCoord = yCoord;
+    }
+
+    public String getxCoord() {
+        return xCoord;
+    }
+
+    public void setxCoord(String xCoord) {
+        this.xCoord = xCoord;
+    }
+
+    public int getTotalLots() {
+        return totalLots;
+    }
+
+    public void setTotalLots(int totalLots) {
+        this.totalLots = totalLots;
+    }
+
+    public String getLotType() {
+        return lotType;
+    }
+
+    public void setLotType(String lotType) {
+        this.lotType = lotType;
+    }
+
+    public int getLotsAvailable() {
+        return lotsAvailable;
+    }
+
+    public void setLotsAvailable(int lotsAvailable) {
+        this.lotsAvailable = lotsAvailable;
+    }
+
+    private String lotType;
+
+    private int lotsAvailable;
+
 
 //    private int totalLots;
 
@@ -166,5 +225,29 @@ public class CarparkInfoRecord {
 
     public void setTypeOfParkingSystem(String typeOfParkingSystem) {
         this.typeOfParkingSystem = typeOfParkingSystem;
+    }
+
+    public static class Comparators {
+
+        public static Comparator<CarparkInfoRecord> AVAILABLESLOTS = new Comparator<CarparkInfoRecord>() {
+            @Override
+            public int compare(CarparkInfoRecord o1, CarparkInfoRecord o2) {
+                return o1.getLotsAvailable() - o2.getLotsAvailable();
+            }
+        };
+        public static Comparator<CarparkInfoRecord> TOTALSLOTS = new Comparator<CarparkInfoRecord>() {
+            @Override
+            public int compare(CarparkInfoRecord o1, CarparkInfoRecord o2) {
+                return o1.getTotalLots() - o2.getTotalLots();
+            }
+        };
+        public static Comparator<CarparkInfoRecord> DISTANCE = new Comparator<CarparkInfoRecord>() {
+            @Override
+            public int compare(CarparkInfoRecord o1, CarparkInfoRecord o2) {
+                if(o1.getDistanceToDevice() > o2.getDistanceToDevice()) return 1;
+                if(o1.getDistanceToDevice() < o2.getDistanceToDevice()) return -1;
+                return 0;
+            }
+        };
     }
 }

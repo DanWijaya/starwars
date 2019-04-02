@@ -18,6 +18,7 @@ import starwars.coding.com.ParkLah.Database.CarparkDB;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAPIInterface;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailability;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityDatum;
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityInfo;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfo;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
@@ -25,6 +26,7 @@ import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 public class APIManager {
 
     private AccountDB db;
+    public List<CarparkAvailabilityDatum> carparkAvailability;
 
     public APIManager(AccountDB db){
         this.db = db;
@@ -58,7 +60,7 @@ public class APIManager {
         return call;
     }
 
-    private class fetchCarparkInformation extends AsyncTask<String, Void, String> {
+    public class fetchCarparkInformation extends AsyncTask<String, Void, String> {
 
 //        @Override
 //        protected String doInBackground(String... strings) {
@@ -109,6 +111,7 @@ public class APIManager {
                      ) {
                     db.addCarparkInfo(i);
                 }
+                Log.e("test", "Ok I think fetching info is done.");
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -118,16 +121,19 @@ public class APIManager {
 
     }
 
-    public List<CarparkAvailabilityDatum> fetchCarpdarkAvailability(){
-        Call<CarparkAvailability> fetchCarparkAvailability = fetchCarparkAvailability();
-        try{
-            Response<CarparkAvailability> carparkAvailabilityResults = fetchCarparkAvailability.execute();
-            List<CarparkAvailabilityDatum> available = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
-            return available;
+    public class fectchCarparkAvailability extends AsyncTask<String, Void, String>{
 
-        }catch (Exception e){
-            e.printStackTrace();
+        @Override
+        protected String doInBackground(String... strings) {
+            Call<CarparkAvailability> fetchCarparkAvailability = fetchCarparkAvailability();
+            try{
+                Response<CarparkAvailability> carparkAvailabilityResults = fetchCarparkAvailability.execute();
+                List<CarparkAvailabilityDatum> available = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
+                carparkAvailability = available;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
         }
-        return null;
     }
 }
