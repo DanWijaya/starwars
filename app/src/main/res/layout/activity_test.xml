@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="starwars.coding.com.ParkLah.CarparkDetail.CarparkDetailActivity">
-
+    tools:context="starwars.coding.com.ParkLah.test">
 
 </android.support.constraint.ConstraintLayout>

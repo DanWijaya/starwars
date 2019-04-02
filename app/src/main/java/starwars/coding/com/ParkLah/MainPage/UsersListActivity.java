@@ -57,7 +57,7 @@ public class UsersListActivity extends AppCompatActivity {
         recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
         recyclerViewUsers.setHasFixedSize(true);
         recyclerViewUsers.setAdapter(usersRecyclerAdapter);
-        databaseHelper = new AccSqlManager(activity);
+        databaseHelper = AccSqlManager.getInstance(this);
 
         String emailFromIntent = getIntent().getStringExtra("EMAIL");
         textViewName.setText(emailFromIntent);
@@ -70,8 +70,9 @@ public class UsersListActivity extends AppCompatActivity {
      */
     private void getDataFromSQLite() {
         // AsyncTask is used that SQLite operation not blocks the UI Thread.
-        new AsyncTask<Void, Void, Void>() {
-            @Override
+
+         class Task extends AsyncTask<Void, Void, Void>{
+
             protected Void doInBackground(Void... params) {
                 listUsers.clear();
                 listUsers.addAll(databaseHelper.getAllUser());
@@ -79,11 +80,14 @@ public class UsersListActivity extends AppCompatActivity {
                 return null;
             }
 
-            @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 usersRecyclerAdapter.notifyDataSetChanged();
             }
-        }.execute();
+
+        }
+
+        Task task = new Task();
+        task.execute();
     }
 }

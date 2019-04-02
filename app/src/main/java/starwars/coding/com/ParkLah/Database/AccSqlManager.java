@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import starwars.coding.com.ParkLah.Control.CoordManager.SVY21Coordinate;
-import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
+import starwars.coding.com.ParkLah.Entity.Review;
 import starwars.coding.com.ParkLah.Entity.User;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
     //Review Table Columns names
     private static final String COLUMN_REVIEW_ID = "id";
-    private static final String COLUMN_REVIW_USER_ID_FK = "review_user_id";
+    private static final String COLUMN_REVIW_USER_NAME_FK = "review_user_name";
     private static final String COLUMN_REVIW_CARPARK_ID_FK = "review_carpark_id";
     private static final String COLUMN_REVIEW_TEXT = "text";
     private static final String COLUMN_REVIEW_RATING = "rating";
@@ -98,7 +98,7 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
         String CREATE_REVIEW_TABLE = "CREATE TABLE " + TABLE_REVIEW + "("
                 + COLUMN_REVIEW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_REVIW_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USER + ","
+                + COLUMN_REVIW_USER_NAME_FK + " INTEGER REFERENCES " + TABLE_USER + ","
                 + COLUMN_REVIW_CARPARK_ID_FK + " INTEGER REFERENCES " + TABLE_CARPARK + ","
                 + COLUMN_REVIEW_TEXT + " TEXT,"
                 + COLUMN_REVIEW_RATING + " REAL" + ")";
@@ -363,6 +363,8 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
                     record.setFreeParking(cursor.getString(cursor.getColumnIndex(COLUMN_FREE_PARKING)));
                     record.setNightParking(cursor.getString(cursor.getColumnIndex(COLUMN_NIGHT_PARKING)));
                     record.setTypeOfParkingSystem(cursor.getString(cursor.getColumnIndex(COLUMN_PARKING_SYSTEM_TYPE)));
+                    record.setGantryHeight(cursor.getString(cursor.getColumnIndex(COLUMN_GANTRY_HEIGHT)));
+
 
                     results.add(record);
                 }while (cursor.moveToFirst());
@@ -376,6 +378,61 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
         }
         return results;
     }
+
+    public void addReview(Review review){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.beginTransaction();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_REVIW_USER_NAME_FK, review.getUserName());
+        values.put(COLUMN_REVIW_CARPARK_ID_FK, review.getCarparkID());
+        values.put(COLUMN_REVIEW_TEXT, review.getText());
+        values.put(COLUMN_REVIEW_RATING, review.getRating());
+
+        // Inserting Row
+        db.insert(TABLE_REVIEW, null, values);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+    }
+
+
+    public List<Review> getReviewsOfCarpark(String carpark_number){
+
+        List<Review> results = new ArrayList<>();
+
+        String QUERY = String.format("" +
+                "SELECT * " +
+                "FROM %s" +
+                "WHERE %s.%s LIKE '%s'",
+                TABLE_REVIEW,
+                TABLE_REVIEW, COLUMN_REVIW_CARPARK_ID_FK, carpark_number);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        try{
+            if(cursor.moveToFirst()){
+                do{
+                    Review review = new Review();
+                    review.setCarparkID(cursor.getString(cursor.getColumnIndex(COLUMN_REVIW_CARPARK_ID_FK)));
+                    review.setUserName(cursor.getString(cursor.getColumnIndex(COLUMN_REVIW_USER_NAME_FK)));
+                    review.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_REVIEW_RATING))));
+                    review.setText(cursor.getString(cursor.getColumnIndex(COLUMN_REVIEW_TEXT)));
+                    results.add(review);
+                }while (cursor.moveToFirst());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(cursor!= null && !cursor.isClosed()){
+                cursor.close();
+            }
+        }
+        return results;
+    }
+
 
 
 

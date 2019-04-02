@@ -15,8 +15,10 @@ import android.view.KeyEvent;
 
 import starwars.coding.com.ParkLah.R;
 
-public class SearchActivity extends ListActivity  {
-protected SQLiteDatabase db;
+public class SearchActivity extends ListActivity implements SearchContract.View  {
+    protected SQLiteDatabase db;
+
+    private SearchContract.Presenter presenter;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +40,11 @@ protected SQLiteDatabase db;
 
         // Get the intent, verify the action and get the query.
         Intent intent = getIntent();
+
+        presenter = new SearchPresenter(this);
         handleIntent(intent);
     }
 
-    public List<String> doMySearch(String query) {
-        List<String> result = new ArrayList<String>();
-
-        Cursor c = db.query(
-                "car"
-        )
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -59,8 +56,9 @@ protected SQLiteDatabase db;
 //        searchPresenter = new SearchPresenter(this);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            presenter.doMySearch(query);
 //            searchPresenter.doMySearch(query);
-            doMySearch(query);
+
         }
     }
 }
