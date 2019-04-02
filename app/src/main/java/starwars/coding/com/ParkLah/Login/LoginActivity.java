@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initViews();
         initListeners();
 
-        AccountDB accountDB = new AccSqlManager(this);
+        AccountDB accountDB = AccSqlManager.getInstance(this);
         this.loginPresenter = new LoginPresenter(this, accountDB);
     }
 

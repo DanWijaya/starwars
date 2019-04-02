@@ -23,6 +23,11 @@
     <string name="text_hello">Hello,</string>
     <string name="text_title">ParkLah!</string>
     <string name="sort_prompt">Sort by:</string>
+    <string name="abc_search_hint">Enter Places, Address or Zip Code</string>
+    <string name="carpark_id">Carpark ID</string>
+    <string name="carpark_address">Address</string>
+    <string name="carpark_distance">Distance to destination</string>
+    <string name="carpark_slots">Available slots</string>
     <string-array name="sort_list">
         <item>Distance</item>
         <item>AvailableSlots</item>

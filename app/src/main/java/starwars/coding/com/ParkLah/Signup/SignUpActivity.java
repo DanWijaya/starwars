@@ -53,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         initViews();
         initListeners();
 
-        AccountDB accountDB = new AccSqlManager(activity);
+        AccountDB accountDB = AccSqlManager.getInstance(this);
         this.signupPresenter = new SignupPresenter(this, accountDB);
     }
 
