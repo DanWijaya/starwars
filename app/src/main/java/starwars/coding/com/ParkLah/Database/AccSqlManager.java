@@ -339,9 +339,9 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
                 "SELECT * " +
                 "FROM %s " +
                 "WHERE %s.%s > %s " +
-                "AND %s.%s < %s" +
-                "AND %s.%s > %s" +
-                "AND %s.%s < %s",
+                "AND %s.%s < %s " +
+                "AND %s.%s > %s " +
+                "AND %s.%s < %s ",
                 TABLE_CARPARK,
                 TABLE_CARPARK, COLUMN_X_COORDS, Double.toString(bottomLeft.getEasting()),
                 TABLE_CARPARK, COLUMN_X_COORDS, Double.toString(upperRight.getEasting()),

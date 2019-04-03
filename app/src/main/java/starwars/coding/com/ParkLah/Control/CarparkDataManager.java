@@ -19,7 +19,7 @@ import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 public class CarparkDataManager {
 
     private AccSqlManager db;
-    private APIManager apiManager;
+    public APIManager apiManager;
     private List<CarparkInfoRecord> carparks;
     private int range = 1000;
 
