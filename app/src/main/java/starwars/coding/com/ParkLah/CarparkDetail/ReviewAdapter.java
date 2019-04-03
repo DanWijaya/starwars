@@ -1,4 +1,4 @@
-package starwars.coding.com.ParkLah.Review;
+package starwars.coding.com.ParkLah.CarparkDetail;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,20 +10,20 @@ import android.widget.TextView;
 import starwars.coding.com.ParkLah.R;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
-    private String[] titles = {"Chapter One",
-            "Chapter Two",
-            "Chapter Three",
-            "Chapter Four",
-            "Chapter Five",
-            "Chapter Six",
-            "Chapter Seven",
-            "Chapter Eight"};
+    private String[] titles = {"Daniel W.",
+            "Chen C.",
+            "Pranav S.",
+            "Nathan D.",
+            "Sam D.",
+            "Peter P.",
+            "Tony S.",
+            "Steve R."};
 
-    private String[] details = {"Item one details",
-            "Item two details", "Item three details",
-            "Item four details", "Item five details",
-            "Item six details", "Item seven details",
-            "Item eight details"};
+    private String[] details = {"Great Carpark! I love it!",
+            "It's okay", "Lots of covered parking",
+            "Quite reasonably priced", "Great value!",
+            "They sell watermelon also!", "Not that great, my car was boiling after a while",
+            "Don't go on Saturday, very crowded"};
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView itemTitle;
