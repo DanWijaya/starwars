@@ -24,7 +24,7 @@ import starwars.coding.com.ParkLah.R;
 
 
 public class SearchActivity extends ListActivity implements SearchContract.View  {
-    protected SQLiteDatabase db;
+//    protected SQLiteDatabase db;
 
     private SearchContract.Presenter presenter;
 
@@ -43,20 +43,20 @@ public class SearchActivity extends ListActivity implements SearchContract.View 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout1);
-        // can we get lists from the db or what?
-        ListAdapter adapter = (ListAdapter) findViewById();
-
-        int adapterCnt = adapter.getCount();
-
-        for(int i = 0; i < adapterCnt; i++){
-            View item = adapter.getView(i, null, null);
-            layout.addView(item);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         //handleIntent(getIntent());
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout1);
+        // can we get lists from the db or what?
+//        ListAdapter adapter = (ListAdapter) findViewById(R.id.);
+//
+//        int adapterCnt = adapter.getCount();
+//
+//        for(int i = 0; i < adapterCnt; i++){
+//            View item = adapter.getView(i, null, null);
+//            layout.addView(item);
+//        }
 
         // DOing the spinner part.
         Spinner mySpinner = (Spinner)

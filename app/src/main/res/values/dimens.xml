@@ -1,3 +1,4 @@
-<resources>
-    <dimen name="fab_margin">16dp</dimen>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="design_go_fab" tools:override="true">80dp</dimen>
+    <dimen name="design_go_icon" tools:override="true">48dp</dimen>
 </resources>

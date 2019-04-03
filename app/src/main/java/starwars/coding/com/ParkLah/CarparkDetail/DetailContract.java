@@ -16,7 +16,7 @@ public interface DetailContract {
 
         void onWriteReview();
 
-
+        void onSearchCarpark(String search);
 
 
     }
