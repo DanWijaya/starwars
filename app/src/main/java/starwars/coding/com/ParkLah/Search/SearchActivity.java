@@ -12,8 +12,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.ListView;
+import android.widget.ListAdapter;
 
 import starwars.coding.com.ParkLah.R;
+
 
 public class SearchActivity extends ListActivity implements SearchContract.View  {
     protected SQLiteDatabase db;
@@ -34,11 +42,37 @@ public class SearchActivity extends ListActivity implements SearchContract.View 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout1);
+        // can we get lists from the db or what?
+        ListAdapter adapter = (ListAdapter) findViewById();
+
+        int adapterCnt = adapter.getCount();
+
+        for(int i = 0; i < adapterCnt; i++){
+            View item = adapter.getView(i, null, null);
+            layout.addView(item);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        handleIntent(getIntent());
+        //handleIntent(getIntent());
+
+        // DOing the spinner part.
+        Spinner mySpinner = (Spinner)
+                findViewById(R.id.sort_options_spinner);
+
+        ArrayAdapter<String> myAdapter = new
+                ArrayAdapter<String>(this,
+                android.R.layout.activity_list_item,
+                getResources().getStringArray(R.array.sort_list));
+
+        myAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+        mySpinner.setAdapter(myAdapter);
 
         // Get the intent, verify the action and get the query.
+        presenter = new SearchPresenter(this);
         Intent intent = getIntent();
 
         presenter = new SearchPresenter(this);
@@ -58,7 +92,6 @@ public class SearchActivity extends ListActivity implements SearchContract.View 
             String query = intent.getStringExtra(SearchManager.QUERY);
             presenter.doMySearch(query);
 //            searchPresenter.doMySearch(query);
-
         }
     }
 }

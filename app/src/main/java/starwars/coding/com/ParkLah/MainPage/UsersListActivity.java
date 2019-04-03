@@ -71,6 +71,7 @@ public class UsersListActivity extends AppCompatActivity {
     private void getDataFromSQLite() {
         // AsyncTask is used that SQLite operation not blocks the UI Thread.
 
+
          class Task extends AsyncTask<Void, Void, Void>{
 
             protected Void doInBackground(Void... params) {
@@ -84,7 +85,6 @@ public class UsersListActivity extends AppCompatActivity {
                 super.onPostExecute(aVoid);
                 usersRecyclerAdapter.notifyDataSetChanged();
             }
-
         }
 
         Task task = new Task();
