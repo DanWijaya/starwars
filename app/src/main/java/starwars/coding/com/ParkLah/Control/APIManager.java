@@ -1,6 +1,8 @@
 package starwars.coding.com.ParkLah.Control;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import starwars.coding.com.ParkLah.Database.AccSqlManager;
 import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.Database.CarparkDB;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAPIInterface;
@@ -27,11 +30,19 @@ import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
 public class APIManager {
 
-    private AccountDB db;
+    private AccSqlManager db;
+    private static APIManager aInstance;
     public List<CarparkAvailabilityDatum> carparkAvailability;
 
-    public APIManager(AccountDB db){
-        this.db = db;
+    public static synchronized APIManager getaInstance(Context context){
+        if(aInstance == null){
+            aInstance = new APIManager(context.getApplicationContext());
+        }
+        return aInstance;
+    }
+
+    private APIManager(Context context){
+        this.db = AccSqlManager.getInstance(context);
     }
 
     private Call<CarparkAvailability> fetchCarparkAvailability() {
@@ -117,7 +128,8 @@ public class APIManager {
             try{
                 Response<CarparkInfo> carparkLotsResults = fetchAllCarparkInfo.execute();
                 List<CarparkInfoRecord> total = carparkLotsResults.body().getResult().getRecords();
-
+                Log.e("debug", "before we add the data into our table"+total.size());
+                db.deleteAllEntries();
                 for (CarparkInfoRecord i: total
                      ) {
                     db.addCarparkInfo(i);
@@ -140,7 +152,7 @@ public class APIManager {
             try{
                 Response<CarparkAvailability> carparkAvailabilityResults = fetchCarparkAvailability.execute();
                 carparkAvailability = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
-                Log.e("test", "Ok I think fetching info is done.");
+                Log.e("test", "Ok I think fetching availability info is done.");
             }catch (Exception e){
                 Log.e("------------","There is something wrong");
                 e.printStackTrace();

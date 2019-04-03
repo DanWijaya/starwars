@@ -1,6 +1,7 @@
 package starwars.coding.com.ParkLah.MainPage;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
@@ -37,11 +38,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+import starwars.coding.com.ParkLah.Control.APIManager;
 import starwars.coding.com.ParkLah.R;
-
-/**
- * Created by User on 10/2/2017.
- */
+import starwars.coding.com.ParkLah.Search.SearchActivity;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, MapContract.View {
 
@@ -53,7 +52,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM = 15f;
 
     //widgets
-//    private EditText mSearchText;
     private ImageView mGps;
     private MaterialSearchView searchView;
     private Toolbar toolbar;
@@ -65,92 +63,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private MapContract.Presenter mapPresenter;
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onMapReady: map is ready");
-        mMap = googleMap;
-
-        if (mLocationPermissionsGranted) {
-            showCurrentLocation();
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            init();
-        }
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "MapCreated");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-//        mSearchText = (EditText) findViewById(R.id.input_search);
+
         mGps = (ImageView) findViewById(R.id.ic_gps);
-        toolbar = (Toolbar) findViewById(R.id.input_search);
+        toolbar = (Toolbar) findViewById(R.id.map_activity_Toolbar);
         setSupportActionBar(toolbar);
-        searchView = (MaterialSearchView)findViewById(R.id.search_view);
-        Geocoder geocoder = new Geocoder(this);
-        mapPresenter = new MapPresenter(geocoder, this);
+        searchView = (MaterialSearchView)findViewById(R.id.map_activity_SearchView);
+
+        APIManager apiManager = APIManager.getaInstance(this);
+        apiManager.new fetchCarparkInformation().execute();
+        apiManager.new fectchCarparkAvailability().execute();
+
+        mapPresenter = new MapPresenter(this);
         getLocationPermission();
     }
 
+
     private void init(){
-        Log.d(TAG, "init: initializing");
 
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.e(TAG, "Search View is happening");
-                //Do some magic
-                return false;
-            }
+                mapPresenter.onSearch(query);
+                return false;}
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Do some magic
                 return false;
             }
         });
-
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                //Do some magic
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-                //Do some magic
-            }
-        });
-
-//        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-//                if(actionId == EditorInfo.IME_ACTION_SEARCH
-//                        || actionId == EditorInfo.IME_ACTION_DONE
-//                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-//                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-//
-//                    //execute our method for searching
-//                    if(mMap != null){
-//                        mMap.clear();
-//                    }
-//
-//                    String searchString = mSearchText.getText().toString();
-//                    mapPresenter.onSearch(searchString);
-//
-////                    geoLocate();
-//                }
-//
-//                return false;
-//            }
-//        });
 
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,13 +102,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 showCurrentLocation();
             }
         });
-
         hideSoftKeyboard();
     }
 
     @Override
     public void showCurrentLocation(){
-        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try{
             if(mLocationPermissionsGranted){
@@ -203,9 +145,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     .position(latLng)
                     .title(title);
             mMap.addMarker(options);
-
         }
-
         hideSoftKeyboard();
     }
 
@@ -266,16 +206,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_map, menu);
-
         MenuItem item = menu.findItem(R.id.action_search);
         searchView.setMenuItem(item);
-
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_map, menu);
         return true;
     }
-
-
 
 
     private void hideSoftKeyboard(){
@@ -283,7 +217,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void showSearchUI() {
+    public void onMapReady(GoogleMap googleMap) {
+        Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onMapReady: map is ready");
+        mMap = googleMap;
+
+        if (mLocationPermissionsGranted) {
+            showCurrentLocation();
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            init();
+        }
+    }
+
+
+    @Override
+    public void showSearchUI(String searchString) {
+        Intent searchUI = new Intent(this, SearchActivity.class);
+        searchUI.putExtra("search_string", searchString);
+        startActivity(searchUI);
 
     }
 }

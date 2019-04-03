@@ -1,31 +1,36 @@
 package starwars.coding.com.ParkLah.Control;
 
+import android.content.Context;
 import android.location.Address;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import starwars.coding.com.ParkLah.Control.CoordManager.SVY21;
 import starwars.coding.com.ParkLah.Control.CoordManager.SVY21Coordinate;
 import starwars.coding.com.ParkLah.Database.AccSqlManager;
-import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityDatum;
-import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityItem;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
 public class CarparkDataManager {
 
     private AccSqlManager db;
-    public APIManager apiManager;
+    private APIManager apiManager;
+    private static CarparkDataManager aInstance;
+
     private List<CarparkInfoRecord> carparks;
     private int range = 1000;
 
-    public CarparkDataManager(AccSqlManager db){
-        this.db = db;
-        apiManager = new APIManager(db);
+    public static CarparkDataManager getaInstance(Context context){
+        if(aInstance == null){
+            aInstance = new CarparkDataManager(context); }
+        return aInstance;
+    }
+    private CarparkDataManager(Context context){
+        this.db = AccSqlManager.getInstance(context);
+        this.apiManager = APIManager.getaInstance(context);
     }
 
     private SVY21Coordinate getBottomLeft(Address address){
@@ -58,7 +63,6 @@ public class CarparkDataManager {
         SVY21Coordinate upperRight = getUpperRight(address);
 
         result = db.getCarparkByCoord(bottomLeft, upperRight);
-
         availability = apiManager.carparkAvailability;
 
         for ( CarparkInfoRecord record: result) {
@@ -71,6 +75,7 @@ public class CarparkDataManager {
                 }
             }
         }
+        Log.e("debug", "Successfully finished creating carpark objects");
         this.carparks = result;
 
         double distance;
@@ -81,18 +86,16 @@ public class CarparkDataManager {
 
             double xcord=Double.parseDouble(record.getXCoord());
             double ycord=Double.parseDouble(record.getYCoord());
-
             distance= Math.sqrt(Math.pow((xcord-x),2)+(Math.pow((ycord-y),2)));
-
-            record.setDistanceToDevice(distance);
+            record.setDistance(Math.round(distance));
         }
 
         Collections.sort(carparks, CarparkInfoRecord.Comparators.DISTANCE);
-
         return carparks;
     }
 
-    public List<CarparkInfoRecord> sortByDistance(Address address)
+
+    public List<CarparkInfoRecord> sortByDistance()
     {
         Collections.sort(carparks, CarparkInfoRecord.Comparators.DISTANCE);
         return carparks;

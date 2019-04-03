@@ -6,92 +6,121 @@ import java.util.List;
 import android.app.ListActivity;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.ListView;
 import android.widget.ListAdapter;
+import android.support.v7.widget.Toolbar;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.R;
 
 
-public class SearchActivity extends ListActivity implements SearchContract.View  {
+public class SearchActivity extends AppCompatActivity implements SearchContract.View  {
     protected SQLiteDatabase db;
 
     private SearchContract.Presenter presenter;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_search);
-//
-//        Intent intent = getIntent();
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())){
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-////            doMySearch(query);
-//            //Send data to presenter to perform the search
-//        }
+    private MaterialSearchView searchView;
+    private Toolbar toolbar;
+    private Spinner spinner;
+
+    private Geocoder geocoder;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setting up the recycler views
+        setContentView(R.layout.activity_search);
+        recyclerView = findViewById(R.id.search_activity_recyclerView);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout1);
-        // can we get lists from the db or what?
-        ListAdapter adapter = (ListAdapter) findViewById();
+        //setting up presenter
+        geocoder = new Geocoder(this);
+        presenter = new SearchPresenter(this, geocoder);
 
-        int adapterCnt = adapter.getCount();
 
-        for(int i = 0; i < adapterCnt; i++){
-            View item = adapter.getView(i, null, null);
-            layout.addView(item);
+        toolbar = (Toolbar) findViewById(R.id.search_activity_toolbar);
+        setSupportActionBar(toolbar);
+        searchView = (MaterialSearchView) findViewById(R.id.search_activity_SearchView);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                presenter.onSearch(query);
+                return false;}
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        spinner = (Spinner) findViewById(R.id.sort_options_spinner);
+
+        //getting search string from another activit
+        Intent intent = getIntent();
+        String search_string = intent.getStringExtra("search_string");
+
+        //Calling presenter to perform the first search.
+        if(search_string != null){
+            presenter.onSearch(search_string);
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        //handleIntent(getIntent());
-
-        // DOing the spinner part.
-        Spinner mySpinner = (Spinner)
-                findViewById(R.id.sort_options_spinner);
-
-        ArrayAdapter<String> myAdapter = new
-                ArrayAdapter<String>(this,
-                android.R.layout.activity_list_item,
-                getResources().getStringArray(R.array.sort_list));
-
-        myAdapter.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
-        mySpinner.setAdapter(myAdapter);
-
-        // Get the intent, verify the action and get the query.
-        presenter = new SearchPresenter(this);
-        Intent intent = getIntent();
-
-        presenter = new SearchPresenter(this);
-        handleIntent(intent);
     }
-
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
+    protected void onStart() {
+        super.onStart();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 1){
+                    presenter.onSortbySlots();
+                }else if(i == 0){
+                    presenter.onSortbyDistance();
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+
     }
 
-    private void handleIntent(Intent intent) {
-//        searchPresenter = new SearchPresenter(this);
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            presenter.doMySearch(query);
-//            searchPresenter.doMySearch(query);
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
+        return true;
+    }
+
+    public void showSearchResult(List<CarparkInfoRecord> records){
+        adapter = new CarparkSummaryAdapter();
+        ((CarparkSummaryAdapter) adapter).setRecords(records);
+        recyclerView.setAdapter(adapter);
     }
 }

@@ -29,9 +29,10 @@
     <string name="carpark_distance">Distance to destination</string>
     <string name="carpark_slots">Available slots</string>
     <string-array name="sort_list">
-        <item>Distance</item>
-        <item>AvailableSlots</item>
-        <item>Rating</item>
+        <item>Sort by: Distance</item>
+        <item>Sort by: Slots Available</item>
+        <item>Sort by: Rating</item>
+
     </string-array>
     <string name="title_activity_search">SearchActivity</string>
 </resources>

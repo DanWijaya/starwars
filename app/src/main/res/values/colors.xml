@@ -7,4 +7,5 @@
     <color name="colorText">#FFFFFF</color>
     <color name="colorTextHint">#51d8c7</color>
     <color name="theme_primary">#ffffff</color>
+    <color name="GoogleBlue">#4285f4</color>
 </resources>

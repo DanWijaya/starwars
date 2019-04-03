@@ -16,45 +16,39 @@ public class MapPresenter implements MapContract.Presenter {
     private String TAG = "MapPresnter";
     private MapContract.View mapView;
 
-    private Geocoder geocoder;
 
-    public MapPresenter(Geocoder geocoder, MapContract.View mapView) {
-        this.geocoder = geocoder;
+    public MapPresenter(MapContract.View mapView) {
         this.mapView = mapView;
     }
 
-
     // The Latitude and Longitude range for Singapore
-    private static final double LOWER_LEFT_LATITUDE = 1.1200;
-    private static final double LOWER_LEFT_LONGITUDE = 103.6200;
-    private static final double UPPER_RIGHT_LATITUDE = 1.4600;
-    private static final double UPPER_RIGHT_LONGITUDE = 104.1600;
-
-    private static final float DEFAULT_ZOOM = 15f;
-    public MapPresenter(MapContract.View view) {
-        this.mapView = view;
-    }
+//    private static final double LOWER_LEFT_LATITUDE = 1.1200;
+//    private static final double LOWER_LEFT_LONGITUDE = 103.6200;
+//    private static final double UPPER_RIGHT_LATITUDE = 1.4600;
+//    private static final double UPPER_RIGHT_LONGITUDE = 104.1600;
+//    private static final float DEFAULT_ZOOM = 15f;
 
     @Override
     public void onSearch(String searchString) {
-        Log.d(TAG, "geoLocate: geolocating");
-        List<Address> list = new ArrayList<>();
-        try {
-            list = geocoder.getFromLocationName(searchString, 1, LOWER_LEFT_LATITUDE, LOWER_LEFT_LONGITUDE,
-                    UPPER_RIGHT_LATITUDE, UPPER_RIGHT_LONGITUDE);
-        } catch (IOException e) {
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
-        }
-
-        if (list.size() > 0) {
-            Address address = list.get(0);
-
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-
-            mapView.moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
-        }
+        mapView.showSearchUI(searchString);
+//        Log.d(TAG, "geoLocate: geolocating");
+//        List<Address> list = new ArrayList<>();
+//        try {
+//            list = geocoder.getFromLocationName(searchString, 1, LOWER_LEFT_LATITUDE, LOWER_LEFT_LONGITUDE,
+//                    UPPER_RIGHT_LATITUDE, UPPER_RIGHT_LONGITUDE);
+//        } catch (IOException e) {
+//            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
+//        }
+//
+//        if (list.size() > 0) {
+//            Address address = list.get(0);
+//
+//            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+//            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+//
+//            mapView.moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
+//                    address.getAddressLine(0));
+//        }
     }
 }
 

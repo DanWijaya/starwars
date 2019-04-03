@@ -48,14 +48,14 @@ public class CarparkInfoRecord{
 
     private int totalLots;
 
-    private double distanceToDevice;
+    private double distance;
 
-    public double getDistanceToDevice() {
-        return distanceToDevice;
+    public double getDistance() {
+        return distance;
     }
 
-    public void setDistanceToDevice(double distanceToDevice) {
-        this.distanceToDevice = distanceToDevice;
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public String getyCoord() {
@@ -101,27 +101,6 @@ public class CarparkInfoRecord{
     private String lotType;
 
     private int lotsAvailable;
-
-
-//    private int totalLots;
-
-//    public int getTotalLots() {
-//        return totalLots;
-//    }
-
-//    public void setTotalLots(int totalLots) {
-//        this.totalLots = totalLots;
-//    }
-
-//    public int getLotsAvailable() {
-//        return lotsAvailable;
-//    }
-
-//    public void setLotsAvailable(int lotsAvailable) {
-//        this.lotsAvailable = lotsAvailable;
-//    }
-
-//    private int lotsAvailable;
 
     public String getShortTermParking() {
         return shortTermParking;
@@ -232,7 +211,7 @@ public class CarparkInfoRecord{
         public static Comparator<CarparkInfoRecord> AVAILABLESLOTS = new Comparator<CarparkInfoRecord>() {
             @Override
             public int compare(CarparkInfoRecord o1, CarparkInfoRecord o2) {
-                return o1.getLotsAvailable() - o2.getLotsAvailable();
+                return o2.getLotsAvailable() - o1.getLotsAvailable();
             }
         };
         public static Comparator<CarparkInfoRecord> TOTALSLOTS = new Comparator<CarparkInfoRecord>() {
@@ -244,8 +223,8 @@ public class CarparkInfoRecord{
         public static Comparator<CarparkInfoRecord> DISTANCE = new Comparator<CarparkInfoRecord>() {
             @Override
             public int compare(CarparkInfoRecord o1, CarparkInfoRecord o2) {
-                if(o1.getDistanceToDevice() > o2.getDistanceToDevice()) return 1;
-                if(o1.getDistanceToDevice() < o2.getDistanceToDevice()) return -1;
+                if(o1.getDistance() > o2.getDistance()) return 1;
+                if(o1.getDistance() < o2.getDistance()) return -1;
                 return 0;
             }
         };

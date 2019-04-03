@@ -8,13 +8,11 @@ public interface MapContract {
 
         void showCurrentLocation();
 
-        void showSearchUI();
+        void showSearchUI(String searchString);
 
-        void moveCamera(LatLng latLng, float zoom, String title);
     }
 
     interface Presenter{
-
         void onSearch(String searchString);
     }
 }
