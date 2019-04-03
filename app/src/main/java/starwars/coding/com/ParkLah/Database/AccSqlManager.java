@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import starwars.coding.com.ParkLah.Control.CoordManager.SVY21Coordinate;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
@@ -129,7 +130,6 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.beginTransaction();
-
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
         values.put(COLUMN_USER_EMAIL, user.getEmail());
@@ -303,7 +303,6 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.beginTransaction();
-
         ContentValues values = new ContentValues();
         values.put(COLUMN_X_COORDS, record.getXCoord());
         values.put(COLUMN_Y_COORDS, record.getYCoord());
@@ -339,9 +338,9 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
                 "SELECT * " +
                 "FROM %s " +
                 "WHERE %s.%s > %s " +
-                "AND %s.%s < %s" +
-                "AND %s.%s > %s" +
-                "AND %s.%s < %s",
+                "AND %s.%s < %s " +
+                "AND %s.%s > %s " +
+                "AND %s.%s < %s ",
                 TABLE_CARPARK,
                 TABLE_CARPARK, COLUMN_X_COORDS, Double.toString(bottomLeft.getEasting()),
                 TABLE_CARPARK, COLUMN_X_COORDS, Double.toString(upperRight.getEasting()),
@@ -350,10 +349,12 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(QUERY, null);
-
+        int count = 0;
         try{
             if(cursor.moveToFirst()){
                 do{
+                    Log.e("debug", "found record " + count);
+                    count++;
                     CarparkInfoRecord record = new CarparkInfoRecord();
                     record.setCarParkNo(cursor.getString(cursor.getColumnIndex(COLUMN_UID)));
                     record.setAddress(cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS)));
@@ -364,10 +365,8 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
                     record.setNightParking(cursor.getString(cursor.getColumnIndex(COLUMN_NIGHT_PARKING)));
                     record.setTypeOfParkingSystem(cursor.getString(cursor.getColumnIndex(COLUMN_PARKING_SYSTEM_TYPE)));
                     record.setGantryHeight(cursor.getString(cursor.getColumnIndex(COLUMN_GANTRY_HEIGHT)));
-
-
                     results.add(record);
-                }while (cursor.moveToFirst());
+                }while (cursor.moveToNext());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -376,6 +375,8 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
                 cursor.close();
             }
         }
+        Log.e("debug", "The results we fetched are: " + results.size());
+
         return results;
     }
 
@@ -421,7 +422,7 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
                     review.setRating(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_REVIEW_RATING))));
                     review.setText(cursor.getString(cursor.getColumnIndex(COLUMN_REVIEW_TEXT)));
                     results.add(review);
-                }while (cursor.moveToFirst());
+                }while (cursor.moveToNext());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -433,8 +434,9 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
         return results;
     }
 
-
-
-
-
-}
+        public void deleteAllEntries(){
+            SQLiteDatabase db = this.getReadableDatabase();
+            String DELETE_ALL_RECORDS = "DELETE FROM " + TABLE_CARPARK;
+            db.execSQL(DELETE_ALL_RECORDS);
+        }
+    }

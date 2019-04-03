@@ -19,6 +19,7 @@
             android:name=".Login.LoginActivity"
             android:screenOrientation="portrait" />
 
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -32,12 +33,12 @@
         <activity
             android:name=".MainPage.MapActivity"
             android:screenOrientation="portrait">
-
-            <!-- enable the search dialog to send searches to SearchableActivity -->
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value=".SearchActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
         <activity
             android:name=".MainPage.UsersListActivity"
             android:screenOrientation="portrait" />
@@ -55,11 +56,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".test"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Review.ReviewCardActivity"></activity>
+
         <activity android:name=".Review.ReviewActivity"></activity>
+
     </application>
 
 </manifest>

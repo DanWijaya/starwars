@@ -1,9 +1,12 @@
 package starwars.coding.com.ParkLah.Control;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -12,7 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import starwars.coding.com.ParkLah.Database.AccSqlManager;
 import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.Database.CarparkDB;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAPIInterface;
@@ -25,11 +30,19 @@ import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
 public class APIManager {
 
-    private AccountDB db;
+    private AccSqlManager db;
+    private static APIManager aInstance;
     public List<CarparkAvailabilityDatum> carparkAvailability;
 
-    public APIManager(AccountDB db){
-        this.db = db;
+    public static synchronized APIManager getaInstance(Context context){
+        if(aInstance == null){
+            aInstance = new APIManager(context.getApplicationContext());
+        }
+        return aInstance;
+    }
+
+    private APIManager(Context context){
+        this.db = AccSqlManager.getInstance(context);
     }
 
     private Call<CarparkAvailability> fetchCarparkAvailability() {
@@ -37,10 +50,19 @@ public class APIManager {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(30,TimeUnit.SECONDS)
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
+
         CarparkAPIInterface apiService = retrofit.create(CarparkAPIInterface.class);
         Call<CarparkAvailability> call = apiService.getAvailableSlot();
         return call;
@@ -106,7 +128,8 @@ public class APIManager {
             try{
                 Response<CarparkInfo> carparkLotsResults = fetchAllCarparkInfo.execute();
                 List<CarparkInfoRecord> total = carparkLotsResults.body().getResult().getRecords();
-
+                Log.e("debug", "before we add the data into our table"+total.size());
+                db.deleteAllEntries();
                 for (CarparkInfoRecord i: total
                      ) {
                     db.addCarparkInfo(i);
@@ -128,11 +151,22 @@ public class APIManager {
             Call<CarparkAvailability> fetchCarparkAvailability = fetchCarparkAvailability();
             try{
                 Response<CarparkAvailability> carparkAvailabilityResults = fetchCarparkAvailability.execute();
-                List<CarparkAvailabilityDatum> available = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
-                carparkAvailability = available;
+                carparkAvailability = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
+                Log.e("test", "Ok I think fetching availability info is done.");
             }catch (Exception e){
+                Log.e("------------","There is something wrong");
                 e.printStackTrace();
             }
+
+            int j = 0;
+            for (CarparkAvailabilityDatum i:carparkAvailability
+                 ) {
+                Log.e("------------------1>" + "<" + j +">" , i.getCarparkNumber());
+                Log.e("------------------2>", i.getCarparkInfo().get(0).getLotsAvailable());
+                j++;
+
+            }
+
             return null;
         }
     }

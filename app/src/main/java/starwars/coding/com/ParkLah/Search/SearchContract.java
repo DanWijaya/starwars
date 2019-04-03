@@ -1,17 +1,21 @@
 package starwars.coding.com.ParkLah.Search;
 
+import java.util.List;
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
+
 public interface SearchContract {
 
     interface View{
-
-
-
-
+        public void showSearchResult(List<CarparkInfoRecord> records);
     }
 
     interface Presenter{
 
-        void doMySearch(String searchString);
+        void onSearch(String searchString);
+
+        void onSortbySlots();
+
+        void onSortbyDistance();
 
 
 
