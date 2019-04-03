@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
+import android.widget.Toast;
 
 //import starwars.coding.com.parklahapp1.R;
 import starwars.coding.com.ParkLah.Database.AccountDB;
@@ -114,6 +115,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 String password = textInputEditTextPassword.getText().toString().trim();
                 String confirmPassword = textInputEditTextConfirmPassword.getText().toString().trim();
 
+                Toast.makeText(LoginActivity.this, "Register succeeds", Toast.LENGTH_SHORT).show();
                 signupPresenter.onSignup(name, email, password, confirmPassword);
                 break;
 

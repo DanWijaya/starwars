@@ -21,13 +21,17 @@
     <string name="search_hint">Enter Address, City or Zip Code</string>
     <string name="action_settings">Settings</string>
     <string name="text_hello">Hello,</string>
-    <string name="text_title">ParkLah!</string>
+    <string name="text_review">Rate and review</string>
     <string name="sort_prompt">Sort by:</string>
     <string name="abc_search_hint">Enter Places, Address or Zip Code</string>
     <string name="carpark_id">Carpark ID</string>
     <string name="carpark_address">Address</string>
     <string name="carpark_distance">Distance to destination</string>
     <string name="carpark_slots">Available slots</string>
+    <string name="text_username">Daniel Wijaya</string>
+    <string name="text_reviewdescription">Your review will be posted publicly on the web. </string>
+    <string name="button_submit">Submit</string>
+    <string name="feedback_input">The carpark is very safe</string>
     <string-array name="sort_list">
         <item>Sort by: Distance</item>
         <item>Sort by: Slots Available</item>
