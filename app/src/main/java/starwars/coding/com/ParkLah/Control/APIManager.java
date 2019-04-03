@@ -152,21 +152,9 @@ public class APIManager {
             try{
                 Response<CarparkAvailability> carparkAvailabilityResults = fetchCarparkAvailability.execute();
                 carparkAvailability = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
-                Log.e("test", "Ok I think fetching availability info is done.");
             }catch (Exception e){
-                Log.e("------------","There is something wrong");
                 e.printStackTrace();
             }
-
-            int j = 0;
-            for (CarparkAvailabilityDatum i:carparkAvailability
-                 ) {
-                Log.e("------------------1>" + "<" + j +">" , i.getCarparkNumber());
-                Log.e("------------------2>", i.getCarparkInfo().get(0).getLotsAvailable());
-                j++;
-
-            }
-
             return null;
         }
     }

@@ -1,5 +1,8 @@
 package starwars.coding.com.ParkLah.Search;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.support.v7.widget.AppCompatTextView;
 
 import java.util.List;
 
+import starwars.coding.com.ParkLah.CarparkDetail.CarparkDetailActivity;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.R;
 
@@ -28,6 +32,21 @@ public class CarparkSummaryAdapter extends RecyclerView.Adapter<CarparkSummaryAd
             address = address = (AppCompatTextView)itemView.findViewById(R.id.carpark_summary_address);
             slots = (AppCompatTextView)itemView.findViewById(R.id.carpark_summary_available_slots);
             distance = (AppCompatTextView)itemView.findViewById(R.id.carpark_summary_distance);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+
+                    Context context = v.getContext();
+                    CarparkInfoRecord record = records.get(position);
+                    Intent intent = new Intent(context, CarparkDetailActivity.class);
+                    intent.putExtra("carpark", record);
+                    context.startActivity(intent);
+                }
+            });
+
+
         }
     }
 

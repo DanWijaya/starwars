@@ -72,10 +72,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setSupportActionBar(toolbar);
         searchView = (MaterialSearchView)findViewById(R.id.map_activity_SearchView);
 
-        APIManager apiManager = APIManager.getaInstance(this);
-        apiManager.new fetchCarparkInformation().execute();
-        apiManager.new fectchCarparkAvailability().execute();
-
         mapPresenter = new MapPresenter(this);
         getLocationPermission();
     }

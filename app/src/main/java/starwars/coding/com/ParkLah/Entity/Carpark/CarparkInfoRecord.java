@@ -3,9 +3,10 @@ package starwars.coding.com.ParkLah.Entity.Carpark;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class CarparkInfoRecord{
+public class CarparkInfoRecord implements Serializable {
     @SerializedName("short_term_parking")
     @Expose
     private String shortTermParking;

@@ -18,7 +18,8 @@
             android:id="@+id/linlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:descendantFocusability="blocksDescendants">
 
             <fragment
                 android:id="@+id/carparkmap"
@@ -165,11 +166,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="free_parking"
+                        android:text="Free_parking"
                         android:textColor="@color/colorTextHint" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/free_parking"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"

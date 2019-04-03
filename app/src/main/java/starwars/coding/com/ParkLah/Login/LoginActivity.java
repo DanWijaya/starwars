@@ -11,6 +11,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
+import starwars.coding.com.ParkLah.Control.APIManager;
 import starwars.coding.com.ParkLah.Database.AccountDB;
 import starwars.coding.com.ParkLah.MainPage.MapActivity;
 import starwars.coding.com.ParkLah.R;
@@ -41,6 +42,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //        getSupportActionBar().hide();
         initViews();
         initListeners();
+
+        APIManager apiManager = APIManager.getaInstance(this);
+        apiManager.new fetchCarparkInformation().execute();
+        apiManager.new fectchCarparkAvailability().execute();
 
         AccountDB accountDB = AccSqlManager.getInstance(this);
         this.loginPresenter = new LoginPresenter(this, accountDB);

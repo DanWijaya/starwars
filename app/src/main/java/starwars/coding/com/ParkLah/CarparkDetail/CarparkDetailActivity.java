@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,9 +31,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 //import starwars.coding.com.ParkLah.MainPage.MapActivity;
+import starwars.coding.com.ParkLah.Control.CoordManager.SVY21;
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.Entity.Review;
 import starwars.coding.com.ParkLah.R;
-import starwars.coding.com.ParkLah.Review.ReviewAdapter;
 
 public class CarparkDetailActivity extends AppCompatActivity implements DetailContract.View, OnMapReadyCallback {
 
@@ -60,29 +62,69 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
 
+    //Set the carpark details view
+
+    AppCompatTextView carparkId;
+    AppCompatTextView address;
+    AppCompatTextView distance;
+    AppCompatTextView slots;
+    AppCompatTextView carparkType;
+    AppCompatTextView typeOfCarpark;
+    AppCompatTextView typeOfCarparkSystem;
+    AppCompatTextView nightParking;
+    AppCompatTextView freeParking;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "Activity starts");
         setContentView(R.layout.activity_carpark_detail);
 
+        Intent intent = getIntent();
+        CarparkInfoRecord record = (CarparkInfoRecord) intent.getSerializableExtra("carpark");
+
+        carparkId = (AppCompatTextView) findViewById(R.id.carparkid);
+        address = (AppCompatTextView) findViewById(R.id.address);
+        distance = (AppCompatTextView) findViewById(R.id.distance);
+        slots = (AppCompatTextView) findViewById(R.id.slots);
+        carparkType = (AppCompatTextView) findViewById(R.id.carparktype);
+        typeOfCarpark = (AppCompatTextView) findViewById(R.id.carparktype);
+        typeOfCarparkSystem = (AppCompatTextView) findViewById(R.id.type_of_carpark);
+        nightParking = (AppCompatTextView) findViewById(R.id.night_parking);
+        freeParking = (AppCompatTextView) findViewById(R.id.free_parking);
+
+        carparkId.setText(record.getCarParkNo());
+        address.setText(record.getAddress());
+        distance.setText(String.valueOf(record.getDistance()));
+        slots.setText(String.valueOf(record.getLotsAvailable()));
+        carparkType.setText(record.getCarParkType());
+        typeOfCarparkSystem.setText(record.getTypeOfParkingSystem());
+        nightParking.setText(record.getNightParking());
+        freeParking.setText(record.getFreeParking());
+
 
         // get the latitude and set to latitude.
+//        Log.e("debug", "" + record.getxCoord());
+        latitude = SVY21.computeLatLon(Double.parseDouble(record.getyCoord()), Double.parseDouble(record.getxCoord())).getLatitude();
+        longitude = SVY21.computeLatLon(Double.parseDouble(record.getyCoord()), Double.parseDouble(record.getxCoord())).getLongitude();
+
         // get the longitude and set to longitude.
 
-        gmnIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=1.2494,103.8303&travelmode=driving");
+        gmnIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=" + latitude + ","+ longitude + "&travelmode=driving");
 
         recyclerView = findViewById(R.id.recycler_view);
-
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-
         adapter = new ReviewAdapter();
         recyclerView.setAdapter(adapter);
-
         Log.e(TAG, "Activity starts");
+
         goToMapButton = (FloatingActionButton) findViewById(R.id.go_fab);
         reviewBtn = (Button) findViewById(R.id.reviewButton);
+
         getLocationPermission();
     }
 
@@ -92,6 +134,8 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
             public void onClick(View v) {
                 // Create an intent from gmnIntentUri. Set the Action to ACTION_VIEW.
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmnIntentUri);
+
+
                 mapIntent.setPackage("com.google.android.apps.maps");
 
                 // Check if there is an available app that can receive the intent
@@ -143,9 +187,9 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
+//                            Location currentLocation = (Location) task.getResult();
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                            moveCamera(new LatLng(latitude, longitude),
                                     DEFAULT_ZOOM,
                                     "My Location");
 
