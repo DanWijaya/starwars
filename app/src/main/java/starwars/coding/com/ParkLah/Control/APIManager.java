@@ -131,7 +131,7 @@ public class APIManager {
                 Log.e("debug", "before we add the data into our table"+total.size());
                 db.deleteAllEntries();
                 for (CarparkInfoRecord i: total
-                     ) {
+                        ) {
                     db.addCarparkInfo(i);
                 }
                 Log.e("test", "Ok I think fetching info is done.");

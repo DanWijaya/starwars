@@ -52,8 +52,7 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".Review.ReviewActivity">
-        </activity>
+        <activity android:name=".Review.ReviewActivity"></activity>
 
     </application>
 
