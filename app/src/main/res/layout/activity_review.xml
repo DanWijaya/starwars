@@ -1,40 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Review.ReviewActivity">
-    <android.support.v7.widget.LinearLayoutCompat
+    tools:context="starwars.coding.com.ParkLah.Review.ReviewActivity">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="50dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayoutComment"
-            android:layout_width="match_parent"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rate and review"
+        android:textColor="@color/quantum_black_100"
+        android:textAlignment="center"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sentosa"
+        android:textAlignment="center"
+        android:textColorHint="@color/quantum_grey"
+        android:textSize="15dp"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daniel Wijaya"
+        android:textSize="15dp"
+        android:textColor="@color/quantum_black_100"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp">
+            android:layout_marginTop="20dp"
+            android:theme="@style/RatingBar"
+            android:numStars="5"
+            android:rating="2.0"
+            android:stepSize="1.0"/>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/textInputEditTextComment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/feedback_input"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@android:color/black" />
-        </android.support.design.widget.TextInputLayout>
-    </android.support.v7.widget.LinearLayoutCompat>
+    <EditText
+        android:layout_marginTop="20dp"
+        android:lines="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme"
+        android:hint="Share any details of your own experience"
+        android:textColorHint="@color/quantum_grey" />
 
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/btnSubmit"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_marginHorizontal="120dp"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    <include layout="@layout/content_main" />
-
-</android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

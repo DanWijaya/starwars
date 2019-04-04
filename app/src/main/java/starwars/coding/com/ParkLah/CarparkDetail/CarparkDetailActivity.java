@@ -35,6 +35,7 @@ import starwars.coding.com.ParkLah.Control.CoordManager.SVY21;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.Entity.Review;
 import starwars.coding.com.ParkLah.R;
+import starwars.coding.com.ParkLah.Review.ReviewActivity;
 
 public class CarparkDetailActivity extends AppCompatActivity implements DetailContract.View, OnMapReadyCallback {
 
@@ -150,7 +151,7 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
         reviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reviewIntent = new Intent (getApplicationContext(), Review.class);
+                Intent reviewIntent = new Intent (getApplicationContext(), ReviewActivity.class);
                 startActivity(reviewIntent);
 
             }
