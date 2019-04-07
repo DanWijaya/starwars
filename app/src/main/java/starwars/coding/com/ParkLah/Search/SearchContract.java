@@ -6,7 +6,12 @@ import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 public interface SearchContract {
 
     interface View{
-        public void showSearchResult(List<CarparkInfoRecord> records);
+        void showSearchResult(List<CarparkInfoRecord> records);
+
+        void showNoAddressError();
+
+        void showNoCarparksError();
+
     }
 
     interface Presenter{

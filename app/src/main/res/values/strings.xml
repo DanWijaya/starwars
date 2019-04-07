@@ -40,4 +40,12 @@
     </string-array>
     <string name="title_activity_search">SearchActivity</string>
     <string name="text_feedback">Write your feedback</string>
+    <string name="reviewconfirm">Confirm to submit?</string>
+    <string name="confirm">Html.fromHtml("<font color='#4885ed'>Confirm</font>")</string>
+    <string name="cancel">Html.fromHtml("<font color='#4885ed'>Cancel</font>")</string>
+    <string name="yes">Html.fromHtml("<font color='#4885ed'>Yes</font>")</string>
+    <string name="no">Html.fromHtml("<font color='#4885ed'>No</font>")</string>
+    <string name="cancelconfirm">Discard the review?</string>
+    <string name="nullcarparks">There are no carparks nearby the location</string>
+    <string name="nulllocation">There are no such locations</string>
 </resources>

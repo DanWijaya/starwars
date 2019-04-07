@@ -153,7 +153,7 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
             public void onClick(View v) {
                 Intent reviewIntent = new Intent (getApplicationContext(), ReviewActivity.class);
                 startActivity(reviewIntent);
-
+                Toast.makeText(getApplication(), "Review subimitted", Toast.LENGTH_SHORT);
             }
         });
 

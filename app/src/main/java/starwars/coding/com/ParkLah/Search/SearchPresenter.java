@@ -3,13 +3,17 @@ package starwars.coding.com.ParkLah.Search;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
+
+import com.google.android.gms.maps.SupportMapFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import starwars.coding.com.ParkLah.Control.CarparkDataManager;
+import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
 public class SearchPresenter implements SearchContract.Presenter {
 
@@ -35,9 +39,22 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void onSearch(String searchString) {
         Address address = geoLocate(searchString);
+        if(address == null){
+            Log.e("A", "address is null");
+            searchView.showNoAddressError();
+//            return;
+        }
         Log.e("addresstest", address.getLongitude() + " " + address.getLatitude());
+
+        List<CarparkInfoRecord> records = carparkDataManager.getNearByCarparks(address);
+
+        if(records.size() == 0) {
+            searchView.showNoCarparksError();
+        }
+
         searchView.showSearchResult(carparkDataManager.getNearByCarparks(address));
     }
+
 
     public void onSortbySlots(){
         searchView.showSearchResult(carparkDataManager.sortByAvailable());
@@ -60,6 +77,7 @@ public class SearchPresenter implements SearchContract.Presenter {
             Address address = list.get(0);
             return address;
         }
+
         return null;
     }
 

@@ -58,16 +58,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme"
+        android:id="@+id/feedbackbox"
         android:hint="Share any details of your own experience"
         android:textColorHint="@color/quantum_grey" />
 
-    <Button
-        android:layout_marginTop="20dp"
-        android:id="@+id/btnSubmit"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_marginHorizontal="120dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="25dp">
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Submit" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Cancel" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
