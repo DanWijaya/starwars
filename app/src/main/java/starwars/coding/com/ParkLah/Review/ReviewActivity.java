@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import starwars.coding.com.ParkLah.R;
 
-public class ReviewActivity extends AppCompatActivity {
+public class ReviewActivity extends AppCompatActivity implements ReviewContract.View {
 
     private Button btn;
     private Button cancelbtn;
@@ -17,6 +17,8 @@ public class ReviewActivity extends AppCompatActivity {
 
     private ConfirmDialogFragment confirmdialog;
     private CancelDialogFragment canceldialog;
+
+    private ReviewPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +28,13 @@ public class ReviewActivity extends AppCompatActivity {
         confirmdialog = new ConfirmDialogFragment();
         canceldialog = new CancelDialogFragment();
 
+        presenter = new ReviewPresenter(this);
+
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                confirmdialog.show(getSupportFragmentManager(), "Notice");
+                presenter.onSubmit();
             }
         });
 
@@ -48,9 +52,19 @@ public class ReviewActivity extends AppCompatActivity {
         cancelbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ReviewActivity.this, "Review cancelled", Toast.LENGTH_SHORT).show();
-                canceldialog.show(getSupportFragmentManager(), "Notice");
+                presenter.onCancel();
             }
         });
+    }
+
+    @Override
+    public void showCancelWarning() {
+        Toast.makeText(ReviewActivity.this, "Review cancelled", Toast.LENGTH_SHORT).show();
+        canceldialog.show(getSupportFragmentManager(), "Notice");
+    }
+
+    @Override
+    public void showNextUI() {
+        confirmdialog.show(getSupportFragmentManager(), "Notice");
     }
 }
