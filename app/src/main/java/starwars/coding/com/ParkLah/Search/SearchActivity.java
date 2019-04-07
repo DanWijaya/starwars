@@ -20,6 +20,7 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.R;
+import starwars.coding.com.ParkLah.Search.NoCarparksDialog;
 
 
 public class SearchActivity extends AppCompatActivity implements SearchContract.View  {
@@ -32,7 +33,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     private MaterialSearchView searchView;
     private Toolbar toolbar;
     private Spinner spinner;
-
+    private NoCarparksDialog noCarparksDialog;
+    private NoLocationDialog noLocationDialog;
     private Geocoder geocoder;
 
 
@@ -108,4 +110,18 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         ((CarparkSummaryAdapter) adapter).setRecords(records);
         recyclerView.setAdapter(adapter);
     }
+
+    public void showNoCarparksError(){
+        Log.e("showZeroResult", "No Carparks");
+        noCarparksDialog = new NoCarparksDialog();
+        noCarparksDialog.show(getSupportFragmentManager(), "Notice");
+    }
+
+    public void showNoAddressError(){
+        Log.e("showNoLocation", "No Location available");
+        noLocationDialog = new NoLocationDialog();
+        Log.e("showNoLocation", "No Location available 2");
+        noLocationDialog.show(getSupportFragmentManager(), "Note");
+    }
+
 }

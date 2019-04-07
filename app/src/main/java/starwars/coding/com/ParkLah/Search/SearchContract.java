@@ -7,6 +7,10 @@ public interface SearchContract {
 
     interface View{
         void showSearchResult(List<CarparkInfoRecord> records);
+
+        void showNoAddressError();
+
+        void showNoCarparksError();
     }
 
     interface Presenter{

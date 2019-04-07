@@ -1,11 +1,18 @@
 package starwars.coding.com.ParkLah.CarparkDetail;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v7.app.AppCompatDialogFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView itemTitle;
         public TextView itemDetail;
+        public TextView itemRating;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -37,7 +45,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                     (TextView)itemView.findViewById(R.id.item_title);
             itemDetail =
                     (TextView)itemView.findViewById(R.id.item_detail);
+//            itemRating =
+//                    (TextView)itemView.findViewById(R.id.item_review);
         }
+
     }
 
     @NonNull
@@ -54,6 +65,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder viewHolder, int i){
         viewHolder.itemTitle.setText(reviews[i].getUserName());
         viewHolder.itemDetail.setText(reviews[i].getText());
+
     }
 
     @Override

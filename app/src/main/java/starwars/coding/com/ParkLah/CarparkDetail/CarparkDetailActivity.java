@@ -140,7 +140,9 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
         reviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.onWriteReview();
+                Intent reviewIntent = new Intent (getApplicationContext(), ReviewActivity.class);
+                startActivity(reviewIntent);
+                Toast.makeText(getApplication(), "Review subimitted", Toast.LENGTH_SHORT);
             }
         });
 
