@@ -3,7 +3,7 @@ package starwars.coding.com.ParkLah.Database;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 import starwars.coding.com.ParkLah.Entity.User;
 
-public interface AccountDB {
+public interface DataBase {
 
     boolean checkUser(String email, String password);
 

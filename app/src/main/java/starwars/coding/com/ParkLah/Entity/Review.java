@@ -6,6 +6,13 @@ public class Review {
     private double rating;
     private String text;
 
+    public Review(String userName, String carparkID, double rating, String text) {
+        this.userName = userName;
+        this.carparkID = carparkID;
+        this.rating = rating;
+        this.text = text;
+    }
+
     public String getCarparkID() {
         return carparkID;
     }

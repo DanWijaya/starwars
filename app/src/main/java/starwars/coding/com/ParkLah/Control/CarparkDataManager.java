@@ -10,13 +10,13 @@ import java.util.List;
 
 import starwars.coding.com.ParkLah.Control.CoordManager.SVY21;
 import starwars.coding.com.ParkLah.Control.CoordManager.SVY21Coordinate;
-import starwars.coding.com.ParkLah.Database.AccSqlManager;
+import starwars.coding.com.ParkLah.Database.DataBaseManager;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityDatum;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
 public class CarparkDataManager {
 
-    private AccSqlManager db;
+    private DataBaseManager db;
     private APIManager apiManager;
     private static CarparkDataManager aInstance;
 
@@ -29,7 +29,7 @@ public class CarparkDataManager {
         return aInstance;
     }
     private CarparkDataManager(Context context){
-        this.db = AccSqlManager.getInstance(context);
+        this.db = DataBaseManager.getInstance(context);
         this.apiManager = APIManager.getaInstance(context);
     }
 
@@ -63,7 +63,7 @@ public class CarparkDataManager {
         SVY21Coordinate upperRight = getUpperRight(address);
 
         result = db.getCarparkByCoord(bottomLeft, upperRight);
-        availability = apiManager.carparkAvailability;
+        availability = apiManager.getCarparkAvailability();
 
         for ( CarparkInfoRecord record: result) {
             for (int i = 0; i < availability.size(); i++) {

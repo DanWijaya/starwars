@@ -13,11 +13,9 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 //import starwars.coding.com.parklahapp1.R;
-import starwars.coding.com.ParkLah.Database.AccountDB;
+import starwars.coding.com.ParkLah.Database.DataBaseManager;
 import starwars.coding.com.ParkLah.Login.LoginActivity;
 import starwars.coding.com.ParkLah.R;
-import starwars.coding.com.ParkLah.Entity.User;
-import starwars.coding.com.ParkLah.Database.AccSqlManager;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener, SignupContract.View {
 
@@ -38,23 +36,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private AppCompatButton appCompatButtonRegister;
     private AppCompatTextView appCompatTextViewLoginLink;
 
-    //    private InputValidation inputValidation;
-//    private AccSqlManager accSqlManager;
-    private User user;
-
     private SignupContract.Presenter signupPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-//        getSupportActionBar().hide();
-
         initViews();
         initListeners();
 
-        AccSqlManager accSqlManager = AccSqlManager.getInstance(activity);
-        this.signupPresenter = new SignupPresenter(this, accSqlManager);
+        DataBaseManager dataBaseManager = DataBaseManager.getInstance(activity);
+        this.signupPresenter = new SignupPresenter(this, dataBaseManager);
     }
 
     /**
@@ -93,7 +85,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
      */
 //    private void initObjects() {
 //        inputValidation = new InputValidation(activity);
-//        accSqlManager = new AccSqlManager(activity);
+//        accSqlManager = new DataBaseManager(activity);
 //        user = new User();
 //
 //    }
@@ -123,57 +115,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    // What I edited, to prompt user to Login activity once register activity is successful.
-    private void initLoginAfterRegister(){
-        Snackbar.make(nestedScrollView, getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
-//        Toast.makeText(getApplicationContext(), getString(R.string.success_message), Toast.LENGTH_SHORT);
-        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-        startActivity(intent);
-
-    }
 
     /**
-     * This method is to validate the input text fields and post data to SQLite
+     * This method resets the text fields in the case where a reset is required, such as a failed log-in attempt
      */
-//    private void postDataToSQLite() {
-//        if (!inputValidation.isInputEditTextFilled(textInputEditTextName, textInputLayoutName, getString(R.string.error_message_name))) {
-//            return;
-//        }
-//        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
-//            return;
-//        }
-//        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
-//            return;
-//        }
-//        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_password))) {
-//            return;
-//        }
-//        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
-//                textInputLayoutConfirmPassword, getString(R.string.error_password_match))) {
-//            return;
-//        }
-//
-//        if (!accSqlManager.checkUser(textInputEditTextEmail.getText().toString().trim())) {
-//
-//            user.setName(textInputEditTextName.getText().toString().trim());
-//            user.setEmail(textInputEditTextEmail.getText().toString().trim());
-//            user.setPassword(textInputEditTextPassword.getText().toString().trim());
-//
-//            accSqlManager.addUser(user);
-//
-//            emptyInputEditText();
-//            initLoginAfterRegister();
-//
-//
-//        } else {
-//            // Snack Bar to show error message that record already exists
-//            Snackbar.make(nestedScrollView, getString(R.string.error_email_exists), Snackbar.LENGTH_LONG).show();
-//        }
-//
-//
-//    }
-
-
     public void reset(){
         textInputEditTextName.setText(null);
         textInputEditTextEmail.setText(null);
@@ -181,6 +126,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         textInputEditTextConfirmPassword.setText(null);
     }
 
+    /**
+     * This method takes the user to the next UI
+     */
     @Override
     public void showNextUI() {
         Snackbar.make(nestedScrollView, getString(R.string.success_message), Snackbar.LENGTH_LONG).show();
@@ -189,30 +137,45 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
     }
 
+    /**
+     * This method shows the appropriate error message when there is an error relating to the name entered by the user.
+     */
     @Override
     public void showNameError() {
         String nameError = getString(R.string.error_message_name);
         textInputLayoutName.setError(nameError);
     }
 
+    /**
+     * This method shows the appropriate error message when there is an error relating to the email id entered by the user.
+     */
     @Override
     public void showEmailError() {
         String emailError = getString(R.string.error_message_email);
         textInputLayoutEmail.setError(emailError);
     }
 
+    /**
+     * This method shows the appropriate error message when there is an error relating to the password entered by the user.
+     */
     @Override
     public void showPasswordError() {
         String passwordError = getString(R.string.error_message_password);
         textInputLayoutPassword.setError(passwordError);
     }
 
+    /**
+     * This method shows the appropriate error message when the two passwords are not identical
+     */
     @Override
     public void showMismatchError() {
         String mismatchError = getString(R.string.error_password_match);
         textInputLayoutConfirmPassword.setError(mismatchError);
     }
 
+    /**
+     * This method shows the appropriate error message when the email id entered is already registered
+     */
     @Override
     public void showAccountError() {
         String accountExists = getString(R.string.error_email_exists);

@@ -1,7 +1,5 @@
 package starwars.coding.com.ParkLah.Login;
 
-import starwars.coding.com.ParkLah.Database.AccountDB;
-
 public interface LoginContract {
 
     interface View{

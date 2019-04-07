@@ -6,7 +6,7 @@ public interface DetailContract {
 
         void showNavigation();
 
-        void showReview();
+        void showWriteReview();
 
     }
 
@@ -15,9 +15,5 @@ public interface DetailContract {
         void onNavigate();
 
         void onWriteReview();
-
-        void onSearchCarpark(String search);
-
-
     }
 }

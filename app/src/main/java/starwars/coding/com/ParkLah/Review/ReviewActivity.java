@@ -28,8 +28,9 @@ public class ReviewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(ReviewActivity.this, "Review submitted", Toast.LENGTH_SHORT).show();
-                Intent backToCarpark = new Intent(ReviewActivity.this, CarparkDetailActivity.class);
-                startActivity(backToCarpark);
+//                Intent backToCarpark = new Intent(ReviewActivity.this, CarparkDetailActivity.class);
+//                startActivity(backToCarpark);
+                finish();
             }
         });
 

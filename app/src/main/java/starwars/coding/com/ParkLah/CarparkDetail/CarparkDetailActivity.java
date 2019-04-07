@@ -63,20 +63,17 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
     RecyclerView.LayoutManager layoutManager;
     RecyclerView.Adapter adapter;
 
-    //Set the carpark details view
+    //Set up the carpark details view
+    private AppCompatTextView carparkId;
+    private AppCompatTextView address;
+    private AppCompatTextView distance;
+    private AppCompatTextView slots;
+    private AppCompatTextView carparkType;
+    private AppCompatTextView typeOfCarparkSystem;
+    private AppCompatTextView nightParking;
+    private AppCompatTextView freeParking;
 
-    AppCompatTextView carparkId;
-    AppCompatTextView address;
-    AppCompatTextView distance;
-    AppCompatTextView slots;
-    AppCompatTextView carparkType;
-    AppCompatTextView typeOfCarpark;
-    AppCompatTextView typeOfCarparkSystem;
-    AppCompatTextView nightParking;
-    AppCompatTextView freeParking;
-
-
-
+    private CarparkDetailPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +81,19 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
         Log.e(TAG, "Activity starts");
         setContentView(R.layout.activity_carpark_detail);
 
+        //Getting the intent from previous activity
         Intent intent = getIntent();
         CarparkInfoRecord record = (CarparkInfoRecord) intent.getSerializableExtra("carpark");
 
+        //setting up all the infomation
         carparkId = (AppCompatTextView) findViewById(R.id.carparkid);
         address = (AppCompatTextView) findViewById(R.id.address);
         distance = (AppCompatTextView) findViewById(R.id.distance);
         slots = (AppCompatTextView) findViewById(R.id.slots);
         carparkType = (AppCompatTextView) findViewById(R.id.carparktype);
-        typeOfCarpark = (AppCompatTextView) findViewById(R.id.carparktype);
         typeOfCarparkSystem = (AppCompatTextView) findViewById(R.id.type_of_carpark);
         nightParking = (AppCompatTextView) findViewById(R.id.night_parking);
         freeParking = (AppCompatTextView) findViewById(R.id.free_parking);
-
         carparkId.setText(record.getCarParkNo());
         address.setText(record.getAddress());
         distance.setText(String.valueOf(record.getDistance()));
@@ -105,15 +102,13 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
         typeOfCarparkSystem.setText(record.getTypeOfParkingSystem());
         nightParking.setText(record.getNightParking());
         freeParking.setText(record.getFreeParking());
+        carparkType.setText(record.getCarParkType());
 
-
-        // get the latitude and set to latitude.
-//        Log.e("debug", "" + record.getxCoord());
+        //Get the coordinates
         latitude = SVY21.computeLatLon(Double.parseDouble(record.getyCoord()), Double.parseDouble(record.getxCoord())).getLatitude();
         longitude = SVY21.computeLatLon(Double.parseDouble(record.getyCoord()), Double.parseDouble(record.getxCoord())).getLongitude();
 
-        // get the longitude and set to longitude.
-
+        //Set the map to show the location of the carpark
         gmnIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&destination=" + latitude + ","+ longitude + "&travelmode=driving");
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -126,54 +121,53 @@ public class CarparkDetailActivity extends AppCompatActivity implements DetailCo
         goToMapButton = (FloatingActionButton) findViewById(R.id.go_fab);
         reviewBtn = (Button) findViewById(R.id.reviewButton);
 
+        this.presenter = new CarparkDetailPresenter(this);
+
         getLocationPermission();
     }
 
+    /**
+     *
+     */
     public void init() {
         goToMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an intent from gmnIntentUri. Set the Action to ACTION_VIEW.
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmnIntentUri);
-
-
-                mapIntent.setPackage("com.google.android.apps.maps");
-
-                // Check if there is an available app that can receive the intent
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    // Attempt to start an activity that can handle the Intent.
-                    startActivity(mapIntent);
-                }
-
+                presenter.onNavigate();
             }
         });
 
         reviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent reviewIntent = new Intent (getApplicationContext(), ReviewActivity.class);
-                startActivity(reviewIntent);
-
+                presenter.onWriteReview();
             }
         });
 
 
     }
-
     private void initMap() {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.carparkmap);
-
         mapFragment.getMapAsync(CarparkDetailActivity.this);
     }
 
     public void showNavigation() {
+        // Create an intent from gmnIntentUri. Set the Action to ACTION_VIEW.
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmnIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        // Check if there is an available app that can receive the intent
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            // Attempt to start an activity that can handle the Intent.
+            startActivity(mapIntent);
+        }
 
     }
 
-    public void showReview() {
-
+    public void showWriteReview() {
+        Intent reviewIntent = new Intent (getApplicationContext(), ReviewActivity.class);
+        startActivity(reviewIntent);
     }
 
     public void showCurrentLocation(){

@@ -15,7 +15,7 @@ import starwars.coding.com.ParkLah.Entity.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
+public class DataBaseManager extends SQLiteOpenHelper implements DataBase {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -56,16 +56,16 @@ public class AccSqlManager extends SQLiteOpenHelper implements AccountDB {
 
 
     //Singleton Pattern
-    private static AccSqlManager aInstance;
+    private static DataBaseManager aInstance;
 
-    public static synchronized AccSqlManager getInstance(Context context){
+    public static synchronized DataBaseManager getInstance(Context context){
         if(aInstance == null){
-            aInstance = new AccSqlManager(context.getApplicationContext());
+            aInstance = new DataBaseManager(context.getApplicationContext());
         }
         return aInstance;
     }
 
-    private AccSqlManager(Context context) {
+    private DataBaseManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

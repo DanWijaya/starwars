@@ -14,25 +14,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import starwars.coding.com.ParkLah.Database.AccSqlManager;
-import starwars.coding.com.ParkLah.Database.AccountDB;
-import starwars.coding.com.ParkLah.Database.CarparkDB;
+import starwars.coding.com.ParkLah.Database.DataBaseManager;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAPIInterface;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailability;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityDatum;
-import starwars.coding.com.ParkLah.Entity.Carpark.CarparkAvailabilityInfo;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfo;
 import starwars.coding.com.ParkLah.Entity.Carpark.CarparkInfoRecord;
 
 
 public class APIManager {
 
-    private AccSqlManager db;
+    private DataBaseManager db;
     private static APIManager aInstance;
-    public List<CarparkAvailabilityDatum> carparkAvailability;
+    private List<CarparkAvailabilityDatum> carparkAvailability;
 
     public static synchronized APIManager getaInstance(Context context){
         if(aInstance == null){
@@ -42,7 +38,7 @@ public class APIManager {
     }
 
     private APIManager(Context context){
-        this.db = AccSqlManager.getInstance(context);
+        this.db = DataBaseManager.getInstance(context);
     }
 
     private Call<CarparkAvailability> fetchCarparkAvailability() {
@@ -84,43 +80,6 @@ public class APIManager {
 
     public class fetchCarparkInformation extends AsyncTask<String, Void, String> {
 
-//        @Override
-//        protected String doInBackground(String... strings) {
-//            List<CarparkInfoRecord> results = new ArrayList<>();
-//            Call<CarparkAvailability> fetchCarparkAvailability = fetchCarparkAvailability();
-//            Call<CarparkInfo> fetchAllCarparkInfo = fetchAllCarparkInfo();
-//            try {
-//                Response<CarparkAvailability> carparkAvailabilityResults = fetchCarparkAvailability.execute();
-//                Response<CarparkInfo> carparkLotsResults = fetchAllCarparkInfo.execute();
-//                List<CarparkAvailabilityDatum> available = carparkAvailabilityResults.body().getItems().get(0).getCarparkData();
-//                List<CarparkInfoRecord> total = carparkLotsResults.body().getResult().getRecords();
-//
-//                for (int i = 0; i < available.size(); i++) { // optimize this please
-//                    for (int p = 0; p < total.size(); p++) {
-//                        if (available.get(i).getCarparkNumber().equals(total.get(p).getCarParkNo())) {
-//                            Log.e("Got 1", available.get(i).getCarparkNumber());
-//                            CarparkInfoRecord record = total.get(p);
-//                            record.setTotalLots(Integer.parseInt(available.get(i).getCarparkInfo().get(0).getTotalLots()));
-//                            record.setLotsAvailable(Integer.parseInt(available.get(i).getCarparkInfo().get(0).getLotsAvailable()));
-//                            results.add(record);
-//                            total.remove(p);
-//                            available.remove(i);
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                Log.e("Records", results.size() + " total records");
-//                db.deleteAllEntries();
-//                for (int i = 0; i < results.size(); i++) {
-//                    db.addCarparkInfo(results.get(i));
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-
         @Override
         protected String doInBackground(String... strings){
             List<CarparkInfoRecord> results = new ArrayList<>();
@@ -157,5 +116,9 @@ public class APIManager {
             }
             return null;
         }
+    }
+
+    public List<CarparkAvailabilityDatum> getCarparkAvailability() {
+        return carparkAvailability;
     }
 }

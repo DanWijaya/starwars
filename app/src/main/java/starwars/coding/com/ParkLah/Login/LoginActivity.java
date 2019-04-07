@@ -12,34 +12,30 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 import starwars.coding.com.ParkLah.Control.APIManager;
-import starwars.coding.com.ParkLah.Database.AccountDB;
+import starwars.coding.com.ParkLah.Database.DataBase;
 import starwars.coding.com.ParkLah.MainPage.MapActivity;
 import starwars.coding.com.ParkLah.R;
 import starwars.coding.com.ParkLah.Signup.SignUpActivity;
-import starwars.coding.com.ParkLah.Database.AccSqlManager;
+import starwars.coding.com.ParkLah.Database.DataBaseManager;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, LoginContract.View {
 
     private final AppCompatActivity activity = LoginActivity.this;
-
     private NestedScrollView nestedScrollView;
 
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutPassword;
-
     private TextInputEditText textInputEditTextEmail;
     private TextInputEditText textInputEditTextPassword;
 
     private AppCompatButton appCompatButtonLogin;
     private AppCompatTextView textViewLinkRegister;
-
     private LoginContract.Presenter loginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        getSupportActionBar().hide();
         initViews();
         initListeners();
 
@@ -47,8 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         apiManager.new fetchCarparkInformation().execute();
         apiManager.new fectchCarparkAvailability().execute();
 
-        AccountDB accountDB = AccSqlManager.getInstance(this);
-        this.loginPresenter = new LoginPresenter(this, accountDB);
+        this.loginPresenter = new LoginPresenter(this);
     }
 
     /**
@@ -59,10 +54,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         textInputLayoutEmail = (TextInputLayout) findViewById(R.id.textInputLayoutEmail);
         textInputLayoutPassword = (TextInputLayout) findViewById(R.id.textInputLayoutPassword);
-
         textInputEditTextEmail = (TextInputEditText) findViewById(R.id.textInputEditTextEmail);
         textInputEditTextPassword = (TextInputEditText) findViewById(R.id.textInputEditTextPassword);
-
         appCompatButtonLogin = (AppCompatButton) findViewById(R.id.appCompatButtonLogin);
         textViewLinkRegister = (AppCompatTextView) findViewById(R.id.textViewLinkRegister);
     }
@@ -95,38 +88,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    /**
-     * This method is to validate the input text fields and verify login credentials from SQLite
-     */
-//    private void verifyFromSQLite() {
-//        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
-//            return;
-//        }
-//        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
-//            return;
-//        }
-//        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_email))) {
-//            return;
-//        }
-//
-//        if (databaseHelper.checkUser(textInputEditTextEmail.getText().toString().trim()
-//                , textInputEditTextPassword.getText().toString().trim())) {
-//
-//
-////            Intent accountsIntent = new Intent(activity, UsersListActivity.class);
-////            accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
-//            emptyInputEditText();
-//
-//            Intent test = new Intent(activity, MapActivity.class);
-//            startActivity(test);
-////            startActivity(accountsIntent);
-//
-//
-//        } else {
-//            // Snack Bar to show success message that record is wrong
-//            Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
-//        }
-//    }
 
     /**
      * This method is to empty all input edit text
@@ -136,23 +97,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         textInputEditTextPassword.setText(null);
     }
 
+    /**
+     * This method displays the UI for the sign up page
+     */
     @Override
     public void showSignUpUI() {
         Intent signUpPage = new Intent(this, SignUpActivity.class);
         startActivity(signUpPage);
     }
 
+    /**
+     * This method displays an error message in the case of a failed log-in attempt
+     */
     @Override
     public void showLoginError() {
         String loginErrorMessage = getString(R.string.error_valid_email_password);
         Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
     }
 
+    /**
+     * This method displays the appropriate error message if the email ID entered is invalid
+     */
     public void showEmailError(){
         String errorMessage = getString(R.string.error_message_email);
         textInputLayoutEmail.setError(errorMessage);
     }
 
+    /**
+     *This method displays the appropriate error message if the user does not enter a password
+     */
     @Override
     public void showPasswordError() {
         String errorMessage = getString(R.string.error_message_password);
@@ -160,6 +133,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    /**
+     * This method displays the main UI of the app after log-in
+     */
     @Override
     public void showMainUI() {
         Intent mainPage = new Intent(this, MapActivity.class);

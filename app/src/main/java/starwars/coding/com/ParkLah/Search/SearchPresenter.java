@@ -17,8 +17,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     private Geocoder geocoder;
     private CarparkDataManager carparkDataManager;
 
-
-
 //  The Latitude and Longitude range for Singapore
     private static final double LOWER_LEFT_LATITUDE = 1.1200;
     private static final double LOWER_LEFT_LONGITUDE = 103.6200;
@@ -26,9 +24,9 @@ public class SearchPresenter implements SearchContract.Presenter {
     private static final double UPPER_RIGHT_LONGITUDE = 104.1600;
     private static final float DEFAULT_ZOOM = 15f;
 
-    SearchPresenter(SearchContract.View searchView, Geocoder geocoder){
+    SearchPresenter(SearchContract.View searchView){
         this.searchView = searchView;
-        this.geocoder = geocoder;
+        this.geocoder = new Geocoder((Context) searchView);
         this.carparkDataManager = CarparkDataManager.getaInstance((Context)searchView);
     }
 
@@ -39,14 +37,28 @@ public class SearchPresenter implements SearchContract.Presenter {
         searchView.showSearchResult(carparkDataManager.getNearByCarparks(address));
     }
 
+    /**
+     * This method is to fetch carparks arranged by available slots
+     * from carparkDataManager
+     */
     public void onSortbySlots(){
         searchView.showSearchResult(carparkDataManager.sortByAvailable());
     }
 
+    /**
+     *
+     */
     public void onSortbyDistance(){
         searchView.showSearchResult(carparkDataManager.sortByDistance());
     }
 
+
+    /**
+     * This method return an address according to user input search string
+     * through geocoder
+     * @param searchString User inputted search string to search for an address
+     * @return An address object.
+     */
     private Address geoLocate(String searchString){
         List<Address> list = new ArrayList<>();
         try {

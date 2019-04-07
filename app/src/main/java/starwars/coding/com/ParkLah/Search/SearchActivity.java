@@ -1,31 +1,19 @@
 package starwars.coding.com.ParkLah.Search;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import android.app.ListActivity;
-import android.app.SearchManager;
 import android.content.Intent;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.ListView;
-import android.widget.ListAdapter;
 import android.support.v7.widget.Toolbar;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -58,8 +46,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         recyclerView.setLayoutManager(layoutManager);
 
         //setting up presenter
-        geocoder = new Geocoder(this);
-        presenter = new SearchPresenter(this, geocoder);
+        presenter = new SearchPresenter(this);
 
         toolbar = (Toolbar) findViewById(R.id.search_activity_toolbar);
         setSupportActionBar(toolbar);
@@ -100,7 +87,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                     presenter.onSortbyDistance();
                 }
             }
-
             public void onNothingSelected(AdapterView<?> adapterView) {
                 return;
             }
@@ -115,6 +101,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         searchView.setMenuItem(item);
         return true;
     }
+
 
     public void showSearchResult(List<CarparkInfoRecord> records){
         adapter = new CarparkSummaryAdapter();
