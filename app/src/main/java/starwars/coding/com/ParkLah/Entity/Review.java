@@ -13,6 +13,11 @@ public class Review {
         this.text = text;
     }
 
+    public Review(){
+        
+    }
+
+
     public String getCarparkID() {
         return carparkID;
     }
